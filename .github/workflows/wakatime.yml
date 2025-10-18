@@ -23,6 +23,5 @@ jobs:
           SHOW_TOTAL: "True"
           TIME_RANGE: "all_time"           # 全部时间
           LANG_COUNT: 10                   # 前10种语言
-          SECTION_NAME: "waka_alltime"     # 自定义一个区域名称
+          SECTION_NAME: "waka_alltime"     # 对应 <!--START_SECTION:waka_alltime-->
           COMMIT_MESSAGE: "Update WakaTime Stats "
-          SECTION_NAME: "waka"
