@@ -24,8 +24,8 @@ jobs:
           SHOW_TOTAL: "True"
           TIME_RANGE: "all_time"
           LANG_COUNT: 0                # 只显示总时长，不显示语言
-          SECTION_NAME: "waka_total"   # <-- 必填，对应 README 占位符
-          TARGET_BRANCH: "main"        # <-- 根据你的分支修改
+          SECTION_NAME: "WakaTotol"   # <-- 对应 README 占位符
+          TARGET_BRANCH: "main"        # <-- 根据分支修改
           TARGET_PATH: "README.md"     # <-- 根据 README 路径修改
           COMMIT_MESSAGE: "Update WakaTime All Time Stats"
 
@@ -41,7 +41,7 @@ jobs:
           SHOW_TOTAL: "False"           # 不显示总时长
           TIME_RANGE: "last_30_days"
           LANG_COUNT: 10                 # 前10种语言
-          SECTION_NAME: "waka_last_30_days_languages"  # <-- 对应 README 占位符
+          SECTION_NAME: "WakaLast30Days"  # <-- 对应 README 占位符
           TARGET_BRANCH: "main"
           TARGET_PATH: "README.md"
           COMMIT_MESSAGE: "Update WakaTime Last 30 Days Language Stats"
