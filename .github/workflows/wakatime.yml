@@ -5,6 +5,9 @@ on:
     - cron: "0 0 * * *"  # 每天 UTC 0 点自动运行（北京时间 08:00）
   workflow_dispatch:
 
+permissions:
+  contents: write  # 允许写入仓库内容
+
 jobs:
   update-wakatime:
     runs-on: ubuntu-latest
