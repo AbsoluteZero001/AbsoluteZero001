@@ -1,5 +1,6 @@
 ### 🧑‍💻 编程总时长统计 🕒（All Time）
-
+<!--START_SECTION:waka_alltime-->
+<!--END_SECTION:waka_alltime-->
 <!-- 单独显示总时长 -->
 **总时长:** <!--START_SECTION:waka_total-->6 hrs 48 mins<!--END_SECTION:waka_total-->
 
