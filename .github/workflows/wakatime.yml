@@ -12,32 +12,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 第一个区域：显示总时长
       - name: Update WakaTime All Time Stats
         uses: athul/waka-readme@master
         with:
           WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPOSITORY: "AbsoluteZero001/AbsoluteZero001"
-          SHOW_TITLE: "True"
-          SHOW_TIME: "True"
-          SHOW_TOTAL: "True"
+          SHOW_TITLE: true
+          SHOW_TIME: true
+          SHOW_TOTAL: true
           TIME_RANGE: "all_time"
-          LANG_COUNT: 0                # 只显示总时长，不显示语言
-          SECTION_NAME: "WakaTotol"   # <-- 对应 README 占位符
+          LANG_COUNT: 0
+          SECTION_NAME: "WakaTotal"
           COMMIT_MESSAGE: "Update WakaTime All Time Stats"
 
-      # 第二个区域：显示最近30天语言统计
       - name: Update WakaTime Last 30 Days Language Stats
         uses: athul/waka-readme@master
         with:
           WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPOSITORY: "AbsoluteZero001/AbsoluteZero001"
-          SHOW_TITLE: "True"
-          SHOW_TIME: "True"
-          SHOW_TOTAL: "False"           # 不显示总时长
+          SHOW_TITLE: true
+          SHOW_TIME: true
+          SHOW_TOTAL: false
           TIME_RANGE: "last_30_days"
-          LANG_COUNT: 10                 # 前10种语言
-          SECTION_NAME: "WakaLast30Days"  # <-- 对应 README 占位符
+          LANG_COUNT: 10
+          SECTION_NAME: "WakaLast30Days"
           COMMIT_MESSAGE: "Update WakaTime Last 30 Days Language Stats"
