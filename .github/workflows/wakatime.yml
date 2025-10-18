@@ -12,16 +12,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name:  更新 WakaTime 数据
+      # 第一个区域：显示总时长
+      - name: Update WakaTime All Time Stats
         uses: athul/waka-readme@master
         with:
           WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          REPOSITORY: "AbsoluteZero001/AbsoluteZero001"   # 指向主页仓库
+          REPOSITORY: "AbsoluteZero001/AbsoluteZero001"
           SHOW_TITLE: "True"
           SHOW_TIME: "True"
           SHOW_TOTAL: "True"
-          TIME_RANGE: "all_time"           # 全部时间
-          LANG_COUNT: 10                   # 前10种语言
-          SECTION_NAME: "wakaalltime"     # 对应 <!--START_SECTION:wakaalltime-->
-          COMMIT_MESSAGE: "Update WakaTime Stats "
+          TIME_RANGE: "all_time"
+          LANG_COUNT: 0                # 只显示总时长，不显示语言
+          COMMIT_MESSAGE: "Update WakaTime All Time Stats"
+
+      # 第二个区域：显示最近30天语言统计
+      - name: Update WakaTime Last 30 Days Language Stats
+        uses: athul/waka-readme@master
+        with:
+          WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          REPOSITORY: "AbsoluteZero001/AbsoluteZero001"
+          SHOW_TITLE: "True"
+          SHOW_TIME: "True"
+          SHOW_TOTAL: "False"           # 不显示总时长
+          TIME_RANGE: "last_30_days"
+          LANG_COUNT: 10                 # 前10种语言
+          COMMIT_MESSAGE: "Update WakaTime Last 30 Days Language Stats"
