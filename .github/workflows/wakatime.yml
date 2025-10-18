@@ -1,4 +1,4 @@
-name: 🕒 Update WakaTime Stats
+name: Update WakaTime Stats
 
 on:
   schedule:
