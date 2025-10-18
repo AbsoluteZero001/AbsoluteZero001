@@ -28,7 +28,6 @@ jobs:
           LANG_COUNT: 0
           SECTION_NAME: "WakaTotal"
           COMMIT_MESSAGE: "Update WakaTime All Time Stats"
-          FORCE_UPDATE: true
 
       - name: Update WakaTime Last 30 Days Language Stats
         uses: athul/waka-readme@master
@@ -43,4 +42,3 @@ jobs:
           LANG_COUNT: 10
           SECTION_NAME: "WakaLast30Days"
           COMMIT_MESSAGE: "Update WakaTime Last 30 Days Language Stats"
-          FORCE_UPDATE: true
