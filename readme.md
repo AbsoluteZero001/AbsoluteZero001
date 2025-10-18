@@ -8,7 +8,7 @@
 ```txt
 From: 14 October 2025 - To: 17 October 2025
 
-Total Time: 6 hrs 42 mins
+Total Time: 6 hrs 48 mins
 
 Java         5 hrs 50 mins   █████████████████████▒░░░   85.84 %
 XML          46 mins         ███░░░░░░░░░░░░░░░░░░░░░░   11.44 %
