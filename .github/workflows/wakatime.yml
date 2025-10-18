@@ -25,8 +25,6 @@ jobs:
           TIME_RANGE: "all_time"
           LANG_COUNT: 0                # 只显示总时长，不显示语言
           SECTION_NAME: "WakaTotol"   # <-- 对应 README 占位符
-          TARGET_BRANCH: "main"        # <-- 根据分支修改
-          TARGET_PATH: "README.md"     # <-- 根据 README 路径修改
           COMMIT_MESSAGE: "Update WakaTime All Time Stats"
 
       # 第二个区域：显示最近30天语言统计
@@ -42,6 +40,4 @@ jobs:
           TIME_RANGE: "last_30_days"
           LANG_COUNT: 10                 # 前10种语言
           SECTION_NAME: "WakaLast30Days"  # <-- 对应 README 占位符
-          TARGET_BRANCH: "main"
-          TARGET_PATH: "README.md"
           COMMIT_MESSAGE: "Update WakaTime Last 30 Days Language Stats"
