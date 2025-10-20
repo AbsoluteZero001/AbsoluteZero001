@@ -1,7 +1,3 @@
-Hello, I come from a rural town in Santai County, Sichuan Province.  
-I am currently studying at Chengdu Industrial Vocational Technical College, School of Information Engineering.  
-Here, I record my learning journey.
----
 ### 🧑‍💻 编程总时长统计 🕒（All Time）
 
 <!--START_SECTION:WakaTotal-->
