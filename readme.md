@@ -26,3 +26,12 @@ Properties   0 secs          ░░░░░░░░░░░░░░░░░
 ```
 
 <!--END_SECTION:WakaLast30Days-->
+
+### 🐍 贪吃蛇贡献图动画
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/AbsoluteZero001/AbsoluteZero001/output/github-contribution-grid-snake-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/AbsoluteZero001/AbsoluteZero001/output/github-contribution-grid-snake.svg">
+  <img alt="github contribution grid snake animation" src="https://raw.githubusercontent.com/AbsoluteZero001/AbsoluteZero001/output/github-contribution-grid-snake.svg">
+</picture>
+
