@@ -15,12 +15,12 @@ Total Time: 11 hrs 14 mins
 <!--START_SECTION:WakaLast30Days-->
 
 ```txt
-From: 19 September 2025 - To: 19 October 2025
+From: 20 September 2025 - To: 20 October 2025
 
-Java         6 hrs 5 mins    █████████████████████▓░░░   86.33 %
-XML          46 mins         ██▓░░░░░░░░░░░░░░░░░░░░░░   11.05 %
-HTML         8 mins          ▓░░░░░░░░░░░░░░░░░░░░░░░░   02.01 %
-SQL          2 mins          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.59 %
+Java         6 hrs 12 mins   █████████████████████▓░░░   86.47 %
+XML          46 mins         ██▓░░░░░░░░░░░░░░░░░░░░░░   10.86 %
+HTML         8 mins          ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.97 %
+SQL          2 mins          ▒░░░░░░░░░░░░░░░░░░░░░░░░   00.67 %
 YAML         0 secs          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.02 %
 Properties   0 secs          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 %
 ```
