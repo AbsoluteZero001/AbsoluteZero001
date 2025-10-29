@@ -39,3 +39,7 @@ Properties       0 secs          ░░░░░░░░░░░░░░░�
   <img alt="github contribution grid snake animation" src="https://raw.githubusercontent.com/AbsoluteZero001/AbsoluteZero001/output/github-contribution-grid-snake.svg">
 </picture>
 
+## Contact Me|联系我
+[![Email Me](https://img.shields.io/badge/Email-absolutezero.cold200@simplelogin.com-blue?style=for-the-badge)](mailto:absolutezero.cold200@simplelogin.com)
+
+
