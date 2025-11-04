@@ -15,12 +15,12 @@ Total Time: 29 hrs 34 mins
 <!--START_SECTION:WakaLast30Days-->
 
 ```txt
-From: 03 October 2025 - To: 02 November 2025
+From: 04 October 2025 - To: 03 November 2025
 
-Java                  23 hrs 11 mins  ███████████████████▓░░░░░   78.55 %
-XML                   2 hrs 44 mins   ██▒░░░░░░░░░░░░░░░░░░░░░░   09.29 %
-HTML                  2 hrs 26 mins   ██░░░░░░░░░░░░░░░░░░░░░░░   08.28 %
-GitIgnore file        23 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.32 %
+Java                  23 hrs 14 mins  ███████████████████▓░░░░░   78.55 %
+XML                   2 hrs 44 mins   ██▒░░░░░░░░░░░░░░░░░░░░░░   09.27 %
+HTML                  2 hrs 26 mins   ██░░░░░░░░░░░░░░░░░░░░░░░   08.27 %
+GitIgnore file        24 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.36 %
 SQL                   21 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.22 %
 textmate              15 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   00.90 %
 Markdown              4 mins          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.27 %
