@@ -1,6 +1,5 @@
 ### 🧑‍💻 编程总时长统计 🕒（All Time）
 [![wakatime](https://wakatime.com/badge/user/c2857ccb-ae63-4fff-b928-93c43434ce3d.svg)](https://wakatime.com/@c2857ccb-ae63-4fff-b928-93c43434ce3d)
-[![wakatime](https://wakatime.com/badge/user/c2857ccb-ae63-4fff-b928-93c43434ce3d/project/5baf76fa-bf68-48e8-80c2-8ee188ba2a69.svg)](https://wakatime.com/badge/user/c2857ccb-ae63-4fff-b928-93c43434ce3d/project/5baf76fa-bf68-48e8-80c2-8ee188ba2a69)
 <!--START_SECTION:WakaTotal-->
 
 ```txt
