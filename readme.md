@@ -15,7 +15,7 @@ Total Time: 46 hrs 18 mins
 <!--START_SECTION:WakaLast30Days-->
 
 ```txt
-From: 10 October 2025 - To: 09 November 2025
+From: 11 October 2025 - To: 10 November 2025
 
 Java                  33 hrs 24 mins  ██████████████████▓░░░░░░   74.47 %
 HTML                  6 hrs 23 mins   ███▓░░░░░░░░░░░░░░░░░░░░░   14.26 %
