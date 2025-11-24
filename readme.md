@@ -15,18 +15,18 @@ Total Time: 56 hrs 14 mins
 <!--START_SECTION:WakaLast30Days-->
 
 ```txt
-From: 22 October 2025 - To: 21 November 2025
+From: 23 October 2025 - To: 22 November 2025
 
-Java                  32 hrs 18 mins  ██████████████████░░░░░░░   71.79 %
-HTML                  7 hrs 8 mins    ████░░░░░░░░░░░░░░░░░░░░░   15.87 %
-XML                   3 hrs 55 mins   ██▒░░░░░░░░░░░░░░░░░░░░░░   08.72 %
-GitIgnore file        42 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.56 %
-SQL                   28 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.05 %
-textmate              15 mins         ░░░░░░░░░░░░░░░░░░░░░░░░░   00.59 %
-Markdown              5 mins          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.20 %
+Java                  31 hrs 46 mins  ██████████████████░░░░░░░   72.66 %
+HTML                  7 hrs 8 mins    ████░░░░░░░░░░░░░░░░░░░░░   16.34 %
+XML                   3 hrs 55 mins   ██▒░░░░░░░░░░░░░░░░░░░░░░   08.98 %
+SQL                   27 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.06 %
+GitIgnore file        18 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   00.71 %
 YAML                  2 mins          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.08 %
 JavaScript            1 min           ░░░░░░░░░░░░░░░░░░░░░░░░░   00.07 %
 Git                   0 secs          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.03 %
+Markdown              0 secs          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.03 %
+Text                  0 secs          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.02 %
 ```
 
 <!--END_SECTION:WakaLast30Days-->
