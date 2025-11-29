@@ -45,6 +45,15 @@ Text                  0 secs          ░░░░░░░░░░░░░░
   <img alt="github contribution grid snake animation" src="https://raw.githubusercontent.com/AbsoluteZero001/AbsoluteZero001/output/github-contribution-grid-snake.svg">
 </picture>
 
+### 💻 自建项目 🚀
+
+
+- 🏢 [小区物业管理系统 - 管理员端](https://github.com/AbsoluteZero001/Java-Project/tree/main/SpringBoot)
+- 📱 [小区物业管理系统 - 客户端](https://github.com/AbsoluteZero001/Java-Project/tree/main/SpringBoot2)
+- 💰 [ATM自动存取款系统](https://github.com/AbsoluteZero001/Java-Project/tree/main/大一下/ATM)
+- 📦 [EPS快递打印系统](https://github.com/AbsoluteZero001/Java-Project/tree/main/大一下/EPS)
+
+
 ## Contact Me|联系我
 [![Email Me](https://img.shields.io/badge/Email-absolutezero.cold200@simplelogin.com-blue?style=for-the-badge)](mailto:absolutezero.cold200@simplelogin.com)
 
