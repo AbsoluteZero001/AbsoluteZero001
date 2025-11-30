@@ -21,18 +21,18 @@ Total Time: 63 hrs 46 mins
 <!--START_SECTION:WakaLast30Days-->
 
 ```txt
-From: 28 October 2025 - To: 27 November 2025
+From: 29 October 2025 - To: 28 November 2025
 
-Java                  28 hrs 48 mins  ██████████████████▒░░░░░░   73.56 %
-HTML                  6 hrs 17 mins   ████░░░░░░░░░░░░░░░░░░░░░   16.06 %
-XML                   3 hrs 22 mins   ██░░░░░░░░░░░░░░░░░░░░░░░   08.60 %
-GitIgnore file        19 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   00.83 %
-SQL                   15 mins         ░░░░░░░░░░░░░░░░░░░░░░░░░   00.66 %
-YAML                  2 mins          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.09 %
+Java                  30 hrs 49 mins  ██████████████████▓░░░░░░   74.02 %
+HTML                  6 hrs 17 mins   ███▓░░░░░░░░░░░░░░░░░░░░░   15.10 %
+XML                   3 hrs 32 mins   ██░░░░░░░░░░░░░░░░░░░░░░░   08.51 %
+GitIgnore file        19 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   00.78 %
+SQL                   15 mins         ░░░░░░░░░░░░░░░░░░░░░░░░░   00.62 %
+YAML                  14 mins         ░░░░░░░░░░░░░░░░░░░░░░░░░   00.56 %
+Java Properties       3 mins          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.14 %
+Properties            2 mins          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.09 %
 JavaScript            1 min           ░░░░░░░░░░░░░░░░░░░░░░░░░   00.08 %
 Markdown              0 secs          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.04 %
-Git                   0 secs          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.04 %
-Text                  0 secs          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.01 %
 ```
 
 <!--END_SECTION:WakaLast30Days-->
