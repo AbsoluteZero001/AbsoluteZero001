@@ -1,0 +1,44 @@
+name: Update WakaTime Stats
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # 每天 UTC 0 点自动运行（北京时间 08:00）
+  workflow_dispatch:
+
+permissions:
+  contents: write  # 允许写入仓库内容
+
+jobs:
+  update-wakatime:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Update WakaTime All Time Stats
+        uses: athul/waka-readme@master
+        with:
+          WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: "AbsoluteZero001/AbsoluteZero001"
+          SHOW_TITLE: true
+          SHOW_TIME: true
+          SHOW_TOTAL: true
+          TIME_RANGE: "all_time"
+          LANG_COUNT: 0
+          SECTION_NAME: "WakaTotal"
+          COMMIT_MESSAGE: "Update WakaTime All Time Stats"
+
+      - name: Update WakaTime Last 30 Days Language Stats
+        uses: athul/waka-readme@master
+        with:
+          WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: "AbsoluteZero001/AbsoluteZero001"
+          SHOW_TITLE: true
+          SHOW_TIME: true
+          SHOW_TOTAL: false
+          TIME_RANGE: "last_30_days"
+          LANG_COUNT: 10
+          SECTION_NAME: "WakaLast30Days"
+          COMMIT_MESSAGE: "Update WakaTime Last 30 Days Language Stats"
