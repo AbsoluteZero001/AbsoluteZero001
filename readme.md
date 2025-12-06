@@ -9,9 +9,9 @@
 <!--START_SECTION:WakaTotal-->
 
 ```txt
-From: 14 October 2025 - To: 04 December 2025
+From: 14 October 2025 - To: 05 December 2025
 
-Total Time: 80 hrs 47 mins
+Total Time: 86 hrs 18 mins
 ```
 
 <!--END_SECTION:WakaTotal-->
