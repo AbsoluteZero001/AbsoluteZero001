@@ -21,18 +21,18 @@ Total Time: 99 hrs 16 mins
 <!--START_SECTION:WakaLast30Days-->
 
 ```txt
-From: 20 November 2025 - To: 20 December 2025
+From: 22 November 2025 - To: 22 December 2025
 
-Java                  23 hrs 36 mins  ███████████████▒░░░░░░░░░   61.96 %
-XML                   3 hrs 53 mins   ██▓░░░░░░░░░░░░░░░░░░░░░░   10.21 %
-HTML                  3 hrs 27 mins   ██▒░░░░░░░░░░░░░░░░░░░░░░   09.05 %
-YAML                  2 hrs 15 mins   █▒░░░░░░░░░░░░░░░░░░░░░░░   05.93 %
-Markdown              2 hrs 6 mins    █▒░░░░░░░░░░░░░░░░░░░░░░░   05.54 %
-C                     1 hr 2 mins     ▓░░░░░░░░░░░░░░░░░░░░░░░░   02.72 %
-JavaScript            33 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.45 %
-SQL                   26 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.16 %
-GitIgnore file        10 mins         ░░░░░░░░░░░░░░░░░░░░░░░░░   00.47 %
-Text                  9 mins          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.40 %
+Java                  27 hrs 29 mins  ████████████████░░░░░░░░░   63.55 %
+HTML                  4 hrs 31 mins   ██▓░░░░░░░░░░░░░░░░░░░░░░   10.46 %
+XML                   3 hrs 10 mins   ██░░░░░░░░░░░░░░░░░░░░░░░   07.36 %
+YAML                  3 hrs 3 mins    █▓░░░░░░░░░░░░░░░░░░░░░░░   07.07 %
+Markdown              2 hrs 7 mins    █▒░░░░░░░░░░░░░░░░░░░░░░░   04.91 %
+C                     1 hr 2 mins     ▓░░░░░░░░░░░░░░░░░░░░░░░░   02.40 %
+JavaScript            35 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.38 %
+SQL                   25 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   00.97 %
+GitIgnore file        14 mins         ░░░░░░░░░░░░░░░░░░░░░░░░░   00.57 %
+Text                  9 mins          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.35 %
 ```
 
 <!--END_SECTION:WakaLast30Days-->
