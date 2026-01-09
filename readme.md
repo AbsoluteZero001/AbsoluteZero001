@@ -21,14 +21,14 @@ Total Time: 130 hrs 57 mins
 <!--START_SECTION:WakaLast30Days-->
 
 ```txt
-From: 07 December 2025 - To: 06 January 2026
+From: 08 December 2025 - To: 07 January 2026
 
-Java              24 hrs 58 mins  ██████████████░░░░░░░░░░░   56.23 %
-HTML              9 hrs 33 mins   █████▒░░░░░░░░░░░░░░░░░░░   21.52 %
+Java              25 hrs 1 min    ██████████████░░░░░░░░░░░   56.27 %
+HTML              9 hrs 33 mins   █████▒░░░░░░░░░░░░░░░░░░░   21.50 %
 XML               2 hrs 22 mins   █▒░░░░░░░░░░░░░░░░░░░░░░░   05.35 %
 YAML              1 hr 41 mins    █░░░░░░░░░░░░░░░░░░░░░░░░   03.80 %
 CSS               1 hr 39 mins    █░░░░░░░░░░░░░░░░░░░░░░░░   03.74 %
-SQL               1 hr 3 mins     ▓░░░░░░░░░░░░░░░░░░░░░░░░   02.40 %
+SQL               1 hr 3 mins     ▓░░░░░░░░░░░░░░░░░░░░░░░░   02.39 %
 Markdown          58 mins         ▓░░░░░░░░░░░░░░░░░░░░░░░░   02.21 %
 JavaScript        52 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.98 %
 GitIgnore file    32 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.22 %
