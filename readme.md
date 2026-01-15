@@ -21,10 +21,10 @@ Total Time: 130 hrs 57 mins
 <!--START_SECTION:WakaLast30Days-->
 
 ```txt
-From: 13 December 2025 - To: 12 January 2026
+From: 14 December 2025 - To: 13 January 2026
 
-Java              22 hrs 34 mins  █████████████▓░░░░░░░░░░░   54.83 %
-HTML              9 hrs 33 mins   █████▓░░░░░░░░░░░░░░░░░░░   23.21 %
+Java              22 hrs 34 mins  █████████████▓░░░░░░░░░░░   54.82 %
+HTML              9 hrs 33 mins   █████▓░░░░░░░░░░░░░░░░░░░   23.22 %
 XML               1 hr 48 mins    █░░░░░░░░░░░░░░░░░░░░░░░░   04.38 %
 CSS               1 hr 39 mins    █░░░░░░░░░░░░░░░░░░░░░░░░   04.04 %
 YAML              1 hr 32 mins    █░░░░░░░░░░░░░░░░░░░░░░░░   03.73 %
