@@ -5,6 +5,8 @@
 [![Bilibili](https://img.shields.io/badge/Bilibili-FF66CC?logo=bilibili&logoColor=white)](https://space.bilibili.com/1391999994)
 [![网易云音乐](https://img.shields.io/badge/网易云音乐-E60026?logo=icloud&logoColor=white)](https://music.163.com/#/user/home?id=1959151468)
 [![Spotify](https://img.shields.io/badge/Spotify-1DB954?logo=spotify&logoColor=white)](https://open.spotify.com/user/31kaj7pzjbpb3r7uuhsg7elzkaia)
+[![Weibo](https://img.shields.io/badge/Weibo-微博-FF0000?style=for-the-badge&logo=weibo&logoColor=white)](https://weibo.com/u/7563637982)
+
 
 <!--START_SECTION:WakaTotal-->
 
