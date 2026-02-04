@@ -25,18 +25,14 @@ Total Time: 131 hrs 4 mins
 <!--START_SECTION:WakaLast30Days-->
 
 ```txt
-From: 02 January 2026 - To: 01 February 2026
+From: 03 January 2026 - To: 02 February 2026
 
-Java              2 hrs 45 mins   ██████████████▓░░░░░░░░░░   58.75 %
-HTML              38 mins         ███▒░░░░░░░░░░░░░░░░░░░░░   13.60 %
-XML               21 mins         ██░░░░░░░░░░░░░░░░░░░░░░░   07.64 %
-JavaScript        13 mins         █▒░░░░░░░░░░░░░░░░░░░░░░░   04.93 %
-SQL               13 mins         █░░░░░░░░░░░░░░░░░░░░░░░░   04.65 %
-Bash              10 mins         █░░░░░░░░░░░░░░░░░░░░░░░░   03.62 %
-Markdown          8 mins          ▓░░░░░░░░░░░░░░░░░░░░░░░░   03.10 %
-YAML              5 mins          ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.84 %
-Properties        4 mins          ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.69 %
-Java Properties   0 secs          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.12 %
+Java       57 mins         ████████████████████▒░░░░   81.16 %
+Markdown   7 mins          ██▓░░░░░░░░░░░░░░░░░░░░░░   11.28 %
+YAML       5 mins          ██░░░░░░░░░░░░░░░░░░░░░░░   07.34 %
+Text       0 secs          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.20 %
+HTML       0 secs          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.02 %
+XML        0 secs          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.01 %
 ```
 
 <!--END_SECTION:WakaLast30Days-->
