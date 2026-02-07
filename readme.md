@@ -25,13 +25,13 @@ Total Time: 131 hrs 4 mins
 <!--START_SECTION:WakaLast30Days-->
 
 ```txt
-From: 05 January 2026 - To: 04 February 2026
+From: 06 January 2026 - To: 05 February 2026
 
-Java       40 mins         ███████████████████▒░░░░░   77.40 %
-Markdown   6 mins          ███░░░░░░░░░░░░░░░░░░░░░░   12.36 %
-YAML       5 mins          ██▒░░░░░░░░░░░░░░░░░░░░░░   09.96 %
-Text       0 secs          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.28 %
-XML        0 secs          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.01 %
+Markdown   6 mins          █████████████████░░░░░░░░   67.55 %
+Java       2 mins          ███████▓░░░░░░░░░░░░░░░░░   30.88 %
+Text       0 secs          ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.52 %
+XML        0 secs          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.02 %
+YAML       0 secs          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.02 %
 ```
 
 <!--END_SECTION:WakaLast30Days-->
