@@ -25,7 +25,7 @@ Total Time: 131 hrs 9 mins
 <!--START_SECTION:WakaLast30Days-->
 
 ```txt
-From: 24 January 2026 - To: 23 February 2026
+From: 25 January 2026 - To: 24 February 2026
 
 Markdown     6 mins                ████████████▒░░░░░░░░░░░░   49.50 %
 Java         4 mins                ████████▓░░░░░░░░░░░░░░░░   34.84 %
