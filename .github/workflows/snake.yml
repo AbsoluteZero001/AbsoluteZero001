@@ -2,8 +2,7 @@ name: generate animation
 
 on:
   schedule:
-    # 每天 UTC 00:00 执行
-    # 北京时间 = UTC+8 → 08:00
+    # 每天 UTC 00:00 执行（北京时间 08:00）
     - cron: "0 0 * * *"
   workflow_dispatch:
   push:
@@ -12,26 +11,31 @@ on:
 
 jobs:
   generate:
-    concurrency: snake
-    permissions:
-      contents: write
+    name: generate snake animation
     runs-on: ubuntu-latest
     timeout-minutes: 5
+
+    concurrency:
+      group: snake
+      cancel-in-progress: true
+
+    permissions:
+      contents: write
 
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
-      - name: generate snake
-        uses: Platane/snk/svg-only@v3
+      - name: generate snake svg
+        uses: Platane/snk/svg-only@v3.4.0
         with:
           github_user_name: ${{ github.repository_owner }}
           outputs: |
             dist/github-contribution-grid-snake.svg
             dist/github-contribution-grid-snake-dark.svg?palette=github-dark
 
-      - name: push pages
-        uses: crazy-max/ghaction-github-pages@v4
+      - name: deploy to output branch
+        uses: crazy-max/ghaction-github-pages@v4.0.0
         with:
           target_branch: output
           build_dir: dist
