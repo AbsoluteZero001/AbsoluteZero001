@@ -2,7 +2,9 @@ name: generate animation
 
 on:
   schedule:
-    - cron: "0 0 * * *" # 每天 UTC 00:00 执行 对应北京时间（UTC+8）每天 08:00 早上执行
+    # 每天 UTC 00:00 执行
+    # 北京时间 = UTC+8 → 08:00
+    - cron: "0 0 * * *"
   workflow_dispatch:
   push:
     branches:
@@ -18,7 +20,7 @@ jobs:
 
     steps:
       - name: generate github-contribution-grid-snake.svg
-        uses: Platane/snk/svg-only@v4
+        uses: Platane/snk/svg-only@v3
         with:
           github_user_name: ${{ github.repository_owner }}
           outputs: |
