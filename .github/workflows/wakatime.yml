@@ -2,18 +2,25 @@ name: Update WakaTime Stats
 
 on:
   schedule:
-    - cron: "0 0 * * *"  # 每天 UTC 0 点自动运行（北京时间 08:00）
+    # 每天 UTC 00:00 执行（北京时间 08:00）
+    - cron: "0 0 * * *"
   workflow_dispatch:
 
 permissions:
-  contents: write  # 允许写入仓库内容
+  contents: write
 
 jobs:
   update-wakatime:
     runs-on: ubuntu-latest
+
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  
 
       - name: Update WakaTime All Time Stats
         uses: athul/waka-readme@master
@@ -27,7 +34,7 @@ jobs:
           TIME_RANGE: "all_time"
           LANG_COUNT: 0
           SECTION_NAME: "WakaTotal"
-          COMMIT_MESSAGE: "Update WakaTime All Time Stats"
+          COMMIT_MESSAGE: "chore: update WakaTime all-time stats"
 
       - name: Update WakaTime Last 30 Days Language Stats
         uses: athul/waka-readme@master
@@ -41,4 +48,4 @@ jobs:
           TIME_RANGE: "last_30_days"
           LANG_COUNT: 10
           SECTION_NAME: "WakaLast30Days"
-          COMMIT_MESSAGE: "Update WakaTime Last 30 Days Language Stats"
+          COMMIT_MESSAGE: "chore: update WakaTime 30-day stats"
