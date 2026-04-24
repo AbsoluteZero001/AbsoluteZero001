@@ -1,4 +1,3 @@
-### 🧑‍💻 编程总时长统计 🕒（All Time）
 
 [![wakatime](https://wakatime.com/badge/user/c2857ccb-ae63-4fff-b928-93c43434ce3d.svg)](https://wakatime.com/@c2857ccb-ae63-4fff-b928-93c43434ce3d)
 [![Steam](https://img.shields.io/badge/Steam-000000?logo=steam&logoColor=white)](https://steamcommunity.com/profiles/76561199444980998)
