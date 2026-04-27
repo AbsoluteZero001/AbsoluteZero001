@@ -1,4 +1,8 @@
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=Exo+2&weight=500&size=30&pause=1000&color=0000FF&background=FFFFFF00&random=true&width=500&lines=Hello%2C+I'm+Tang+Jinjie;Java+Backend+Developer;Never+Stop+Improving)](https://git.io/typing-svg)
+
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Exo+2&weight=500&size=30&pause=1000&color=36BCF7&background=FFFFFF00&random=true&width=500&lines=Hello%2C+I'm+Tang+Jinjie;Java+Backend+Developer;Never+Stop+Improving)](https://git.io/typing-svg)
+
+
+
 
 ## 🛠️ Tech Stack | 语言和工具
 
@@ -7,6 +11,9 @@
 <img src="https://skillicons.dev/icons?i=nginx,nodejs,js,html,css,linux,kali,vim,postman,c&perline=10" />
 
 ##
+
+
+
 
 [![wakatime](https://wakatime.com/badge/user/c2857ccb-ae63-4fff-b928-93c43434ce3d.svg)](https://wakatime.com/@c2857ccb-ae63-4fff-b928-93c43434ce3d)
 [![Steam](https://img.shields.io/badge/Steam-000000?logo=steam&logoColor=white)](https://steamcommunity.com/profiles/76561199444980998)
@@ -31,6 +38,7 @@ Total Time: 158 hrs 4 mins
 
 
 
+
 ### 🧑‍💻 最近 30 天语言统计 🕒
 <!--START_SECTION:WakaLast30Days-->
 
@@ -51,6 +59,8 @@ Text              23 mins               ▒░░░░░░░░░░░░�
 
 <!--END_SECTION:WakaLast30Days-->
 
+
+
 ### 🐍 贪吃蛇贡献图动画
 
 <picture>
@@ -58,6 +68,7 @@ Text              23 mins               ▒░░░░░░░░░░░░�
   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/AbsoluteZero001/AbsoluteZero001/output/github-contribution-grid-snake.svg">
   <img alt="github contribution grid snake animation" src="https://raw.githubusercontent.com/AbsoluteZero001/AbsoluteZero001/output/github-contribution-grid-snake.svg">
 </picture>
+
 
 
 
