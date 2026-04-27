@@ -1,8 +1,10 @@
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&width=435&lines=Hello%2C+I'm+Tang+Jinjie;Java+Backend+Developer;Never+Stop+Improving)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Exo+2&weight=500&size=30&pause=1000&color=0000FF&background=FFFFFF00&random=true&width=500&lines=Hello%2C+I'm+Tang+Jinjie;Java+Backend+Developer;Never+Stop+Improving)](https://git.io/typing-svg)
 
 ## 🛠️ Tech Stack | 语言和工具
-[![My Skills](https://skillicons.dev/icons?i=java,js,html,css,nodejs,spring,mysql,redis,linux,vim,docker,nginx,git,github,idea,pycharm,vscode,postman,)](https://skillicons.dev)
-##
+
+<img src="https://skillicons.dev/icons?i=github,git,idea,pycharm,vscode,spring,java,mysql,redis,docker&perline=10" />
+
+<img src="https://skillicons.dev/icons?i=nginx,nodejs,js,html,css,linux,kali,vim,postman,c&perline=10" />
 
 [![wakatime](https://wakatime.com/badge/user/c2857ccb-ae63-4fff-b928-93c43434ce3d.svg)](https://wakatime.com/@c2857ccb-ae63-4fff-b928-93c43434ce3d)
 [![Steam](https://img.shields.io/badge/Steam-000000?logo=steam&logoColor=white)](https://steamcommunity.com/profiles/76561199444980998)
