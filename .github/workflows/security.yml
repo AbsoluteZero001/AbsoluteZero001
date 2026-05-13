@@ -1,35 +1,86 @@
-name: Security Pipeline
+name: Industrial Java CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
+
+# =========================
+# 全局环境变量
+# =========================
+env:
+  JAVA_VERSION: 17
 
 jobs:
 
-  # =========================
-  # 1. Gitleaks 敏感信息扫描
-  # =========================
-  secret-scan:
-    name: Gitleaks Secret Scan
+# =====================================================
+# 1. FAST CHECK（PR 快速反馈）
+# =====================================================
+  fast-check:
+    name: Fast Check (Compile + Lint Basic)
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: maven   #  Maven cache
+
+      - name: Compile only (fast fail)
+        run: mvn -B -ntp clean compile
+
+
+# =====================================================
+# 2. SECRET SCAN（Gitleaks）
+# =====================================================
+  secret-scan:
+    name: Secret Scan (Gitleaks)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout full history
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 必须：扫描完整 Git 历史
+          fetch-depth: 0
 
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: "--redact --exit-code 1"
 
 
-  # =========================
-  # 2. CodeQL 安全扫描
-  # =========================
+# =====================================================
+# 3. DEPENDENCY SECURITY
+# =====================================================
+  dependency-check:
+    name: OWASP Dependency Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: maven
+
+      - name: Run dependency check
+        run: mvn -B org.owasp:dependency-check-maven:check
+
+
+# =====================================================
+# 4. CODEQL
+# =====================================================
   codeql:
     name: CodeQL Analysis
     runs-on: ubuntu-latest
@@ -40,12 +91,11 @@ jobs:
       actions: read
 
     strategy:
-      fail-fast: false
       matrix:
-        language: [ 'java' ]
+        language: ["java"]
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Initialize CodeQL
@@ -53,29 +103,54 @@ jobs:
         with:
           languages: ${{ matrix.language }}
 
-      - name: Build project
-        run: mvn clean compile -DskipTests
+      - name: Build for CodeQL
+        run: mvn -B -ntp clean compile
 
-      - name: Perform CodeQL Analysis
+      - name: Analyze
         uses: github/codeql-action/analyze@v3
 
 
-  # =========================
-  # 3. Maven 构建检查
-  # =========================
-  build:
-    name: Maven Build Check
+# =====================================================
+# 5. BUILD + TEST
+# =====================================================
+  build-test:
+    name: Build & Test
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: maven
 
-      - name: Build with Maven
-        run: mvn clean package -DskipTests
+      - name: Run tests
+        run: mvn -B test
+
+      - name: Build package
+        run: mvn -B package -DskipTests
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: spring-boot-artifact
+          path: target/*.jar
+
+
+# =====================================================
+# 6. OPTIONAL: Docker Build
+# =====================================================
+  docker-build:
+    name: Docker Build (Optional)
+    runs-on: ubuntu-latest
+    needs: build-test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: docker build -t app:${{ github.sha }} .
