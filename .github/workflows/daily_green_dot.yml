@@ -1,5 +1,9 @@
 name: Daily GitHub Green Dot
 
+# 强制使用 Node.js 24 运行
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   # 每天北京时间 08:00 触发
   schedule:
