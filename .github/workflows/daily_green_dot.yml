@@ -13,20 +13,18 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Update daily commit file
-        run: |
-          echo "Daily commit: $(date '+%Y-%m-%d %H:%M:%S')" >> daily_commit.txt
+        with:
+          persist-credentials: true
 
       - name: Update README daily section
         run: |
           DATE=$(date '+%Y-%m-%d')
           # 替换注释区内容
           if grep -q "<!--START_SECTION:DAILY-->" README.md; then
-            sed -i "/<!--START_SECTION:DAILY-->.*<!--END_SECTION:DAILY-->/c\<!--START_SECTION:DAILY-->\nDaily Progress: $DATE\n<!--END_SECTION:DAILY-->" README.md
+            sed -i "/<!--START_SECTION:DAILY-->.*<!--END_SECTION:DAILY-->/c\<!--START_SECTION:DAILY-->\nLearning Snapshot: $DATE\n<!--END_SECTION:DAILY-->" README.md
           else
             # 如果没有找到注释区，追加到文件末尾
-            echo -e "\n<!--START_SECTION:DAILY-->\nDaily Progress: $DATE\n<!--END_SECTION:DAILY-->" >> README.md
+            echo -e "\n<!--START_SECTION:DAILY-->\nLearning Snapshot: $DATE\n<!--END_SECTION:DAILY-->" >> README.md
           fi
 
       - name: Configure Git
@@ -36,6 +34,6 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git add README.md daily_commit.txt
-          git commit -m "Daily commit for green dot $(date '+%Y-%m-%d')" || echo "No changes to commit"
+          git add README.md
+          git commit -m "Daily progress update: $DATE" || echo "No changes to commit"
           git push
