@@ -77,8 +77,8 @@ Batch                      59 mins               ▓░░░░░░░░░�
 [![Email Me](https://img.shields.io/badge/Email-absolutezero.cold200@simplelogin.com-blue?style=for-the-badge)](mailto:absolutezero.cold200@simplelogin.com)、
 
 
+###
 <!--START_SECTION:DAILY-->
-<img src="https://readme-typing-svg.demolab.com?font=Exo+2&weight=700&size=36&pause=1000&color=36BCF7;FF6EC7&background=FFFFFF00&width=600&lines=Last+update:+2026-05-21" alt="Daily Update"/>
+<img src="https://readme-typing-svg.demolab.com?font=Exo+2&weight=500&size=24&pause=1000&color=36BCF7,FF6EC7&background=FFFFFF00&width=500&lines=Last+update:+2026-05-21" alt="Daily Update"/>
 <!--END_SECTION:DAILY-->
-
 
