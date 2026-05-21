@@ -1,40 +1,41 @@
 name: Daily GitHub Green Dot
 
-# 触发器
 on:
+  # 每天北京时间 08:00 触发
   schedule:
-    - cron: '0 8 * * *'  # 每天北京时间08:00触发
-  workflow_dispatch:    # 手动触发可选
+    - cron: '0 0 * * *'
+  workflow_dispatch: # 手动触发
 
 jobs:
   daily-commit:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ 拉取仓库
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2️⃣ 更新或创建 daily_commit.txt
       - name: Update daily commit file
         run: |
           echo "Daily commit: $(date '+%Y-%m-%d %H:%M:%S')" >> daily_commit.txt
 
-      # 3️⃣ 可选：在 README 添加每日更新（不破坏 WakaTime / Typing SVG）
-      - name: Update README with date (optional)
+      - name: Update README daily section
         run: |
           DATE=$(date '+%Y-%m-%d')
-          sed -i "/<!--START_SECTION:DAILY-->.*<!--END_SECTION:DAILY-->/c\<!--START_SECTION:DAILY-->\nLast green dot: $DATE\n<!--END_SECTION:DAILY-->" README.md || echo "<!--START_SECTION:DAILY-->\nLast green dot: $DATE\n<!--END_SECTION:DAILY-->" >> README.md
+          # 替换注释区内容
+          if grep -q "<!--START_SECTION:DAILY-->" README.md; then
+            sed -i "/<!--START_SECTION:DAILY-->.*<!--END_SECTION:DAILY-->/c\<!--START_SECTION:DAILY-->\nDaily Progress: $DATE\n<!--END_SECTION:DAILY-->" README.md
+          else
+            # 如果没有找到注释区，追加到文件末尾
+            echo -e "\n<!--START_SECTION:DAILY-->\nDaily Progress: $DATE\n<!--END_SECTION:DAILY-->" >> README.md
+          fi
 
-      # 4️⃣ 配置 Git
       - name: Configure Git
         run: |
-          git config user.name "你的GitHub用户名"
-          git config user.email "你的GitHub邮箱"
+          git config user.name "AbsoluteZero"
+          git config user.email "186853152+AbsoluteZero001@users.noreply.github.com"
 
-      # 5️⃣ 提交并推送
       - name: Commit and push changes
         run: |
-          git add daily_commit.txt README.md
+          git add README.md daily_commit.txt
           git commit -m "Daily commit for green dot $(date '+%Y-%m-%d')" || echo "No changes to commit"
           git push
