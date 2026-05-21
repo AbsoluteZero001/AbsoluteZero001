@@ -23,12 +23,10 @@ jobs:
       - name: Update README daily section
         run: |
           DATE=$(date '+%Y-%m-%d')
-          # 替换注释区内容
           if grep -q "<!--START_SECTION:DAILY-->" README.md; then
-            sed -i "/<!--START_SECTION:DAILY-->.*<!--END_SECTION:DAILY-->/c\<!--START_SECTION:DAILY-->\nLearning Snapshot: $DATE\n<!--END_SECTION:DAILY-->" README.md
+            sed -i "/<!--START_SECTION:DAILY-->.*<!--END_SECTION:DAILY-->/c\<img src=\"https://readme-typing-svg.demolab.com?font=Exo+2&weight=700&size=36&pause=1000&color=36BCF7;FF6EC7&background=FFFFFF00&width=600&lines=Last+update:+$DATE\" alt=\"Daily Update\"/>" README.md
           else
-            # 如果没有找到注释区，追加到文件末尾
-            echo -e "\n<!--START_SECTION:DAILY-->\nLearning Snapshot: $DATE\n<!--END_SECTION:DAILY-->" >> README.md
+            echo -e "\n<!--START_SECTION:DAILY-->\n<img src=\"https://readme-typing-svg.demolab.com?font=Exo+2&weight=700&size=36&pause=1000&color=36BCF7;FF6EC7&background=FFFFFF00&width=600&lines=Last+update:+$DATE\" alt=\"Daily Update\"/>" >> README.md
           fi
 
       - name: Configure Git
