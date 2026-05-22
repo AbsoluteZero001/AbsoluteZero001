@@ -1,14 +1,12 @@
 name: Daily GitHub Green Dot
 
-# 强制使用 Node.js 24 运行
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 on:
-  # 每天北京时间 08:00 触发
   schedule:
     - cron: '0 0 * * *'
-  workflow_dispatch: # 手动触发
+  workflow_dispatch:
 
 jobs:
   daily-commit:
@@ -24,9 +22,9 @@ jobs:
         run: |
           DATE=$(date '+%Y-%m-%d')
           if grep -q "<!--START_SECTION:DAILY-->" README.md; then
-            sed -i "/<!--START_SECTION:DAILY-->.*<!--END_SECTION:DAILY-->/c\<img src=\"https://readme-typing-svg.demolab.com?font=Exo+2&weight=700&size=36&pause=1000&color=36BCF7;FF6EC7&background=FFFFFF00&width=600&lines=Last+update:+$DATE\" alt=\"Daily Update\"/>" README.md
+            sed -i "/<!--START_SECTION:DAILY-->.*<!--END_SECTION:DAILY-->/c\<img src=\"https://readme-typing-svg.demolab.com?font=Exo+2&weight=500&size=24&pause=1000&color=36BCF7,FF6EC7&background=FFFFFF00&width=500&lines=Last+update:+$DATE\" alt=\"Daily Update\"/>" README.md
           else
-            echo -e "\n<!--START_SECTION:DAILY-->\n<img src=\"https://readme-typing-svg.demolab.com?font=Exo+2&weight=700&size=36&pause=1000&color=36BCF7;FF6EC7&background=FFFFFF00&width=600&lines=Last+update:+$DATE\" alt=\"Daily Update\"/>" >> README.md
+            echo -e "\n<!--START_SECTION:DAILY-->\n<img src=\"https://readme-typing-svg.demolab.com?font=Exo+2&weight=500&size=24&pause=1000&color=36BCF7,FF6EC7&background=FFFFFF00&width=500&lines=Last+update:+$DATE\" alt=\"Daily Update\"/>" >> README.md
           fi
 
       - name: Configure Git
