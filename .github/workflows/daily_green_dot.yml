@@ -1,14 +1,12 @@
 name: Daily GitHub Green Dot
 
-# 强制使用 Node.js 24 运行
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 on:
-  # 每天北京时间 08:00 触发
   schedule:
     - cron: '0 0 * * *'
-  workflow_dispatch: # 手动触发
+  workflow_dispatch:
 
 jobs:
   daily-commit:
@@ -22,13 +20,16 @@ jobs:
 
       - name: Update README daily section
         run: |
-          # 使用北京时间
+          # 使用北京时间生成日期
           DATE=$(TZ="Asia/Shanghai" date '+%Y-%m-%d')
-          if grep -q "<!--START_SECTION:DAILY-->" README.md; then
-            sed -i "/<!--START_SECTION:DAILY-->.*<!--END_SECTION:DAILY-->/c\<img src=\"https://readme-typing-svg.demolab.com?font=Exo+2&weight=500&size=24&pause=1000&color=36BCF7,FF6EC7&background=FFFFFF00&width=500&lines=Last+update:+$DATE\" alt=\"Daily Update\"/>" README.md
-          else
-            echo -e "\n<!--START_SECTION:DAILY-->\n<img src=\"https://readme-typing-svg.demolab.com?font=Exo+2&weight=500&size=24&pause=1000&color=36BCF7,FF6EC7&background=FFFFFF00&width=500&lines=Last+update:+$DATE\" alt=\"Daily Update\"/>" >> README.md
-          fi
+
+          # 删除旧的 DAILY 区块
+          sed -i '/<!--START_SECTION:DAILY-->/, /<!--END_SECTION:DAILY-->/d' README.md
+
+          # 写入新的 DAILY 区块
+          echo "<!--START_SECTION:DAILY-->" >> README.md
+          echo "<img src=\"https://readme-typing-svg.demolab.com?font=Exo+2&weight=500&size=24&pause=1000&color=36BCF7,FF6EC7&background=FFFFFF00&width=500&lines=Last+update:+$DATE\" alt=\"Daily Update\"/>" >> README.md
+          echo "<!--END_SECTION:DAILY-->" >> README.md
 
       - name: Configure Git
         run: |
