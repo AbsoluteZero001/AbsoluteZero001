@@ -1,0 +1,45 @@
+name: Generate 3D Contribution Calendar
+
+on:
+  schedule:
+    # 每天 UTC 00:10 / 北京时间 08:10
+    - cron: "10 0 * * *"
+
+  workflow_dispatch:
+
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/isocalendar.yml"
+
+jobs:
+  generate:
+    name: Generate 3D Contribution Calendar
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    concurrency:
+      group: isocalendar
+      cancel-in-progress: true
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Generate isometric contribution calendar
+        uses: lowlighter/metrics@latest
+        with:
+          user: ${{ github.repository_owner }}
+          token: ${{ secrets.METRICS_TOKEN }}
+
+          filename: metrics.plugin.isocalendar.svg
+
+          # 不生成默认 Metrics 基础信息
+          base: ""
+
+          # 开启 3D 等距贡献日历
+          plugin_isocalendar: yes
+
+          # 完整一年
+          plugin_isocalendar_duration: full-year
