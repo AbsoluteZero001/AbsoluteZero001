@@ -62,11 +62,11 @@ END_SECTION:WakaLast30Days
 -->
 <h2 align="center">📊 3D Contribution Calendar</h2>
 
-<p align="center">
+<p align="left">
   <img
     src="./metrics.plugin.isocalendar.svg"
     alt="3D Contribution Calendar"
-    width="100%"
+    width="50%"
   />
 </p>
 
