@@ -61,20 +61,13 @@ END_SECTION:WakaLast30Days
 
 -->
 
-<table width="100%">
-  <tr>
-    <td width="50%" align="center" valign="top">
-      <h2>📊 3D 贡献日历</h2>
-      <img
-        src="./metrics.plugin.isocalendar.svg"
-        alt="3D Contribution Calendar"
-        width="100%"
-      />
-    </td>
-    <td width="50%" valign="top">
-    </td>
-  </tr>
-</table>
+<p align="left">
+  <img
+    src="./metrics.plugin.isocalendar.svg"
+    alt="3D Contribution Calendar"
+    width="50%"
+  />
+</p>
 
 ### 🐍 贪吃蛇贡献图动画
 
