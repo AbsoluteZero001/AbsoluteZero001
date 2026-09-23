@@ -60,7 +60,15 @@ Batch                      1 hr 5 mins           ▓░░░░░░░░░�
 END_SECTION:WakaLast30Days
 
 -->
+<h2 align="center">📊 3D Contribution Calendar</h2>
 
+<p align="center">
+  <img
+    src="./metrics.plugin.isocalendar.svg"
+    alt="3D Contribution Calendar"
+    width="100%"
+  />
+</p>
 
 
 ### 🐍 贪吃蛇贡献图动画
