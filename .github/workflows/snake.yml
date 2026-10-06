@@ -2,8 +2,11 @@ name: Generate Snake Animation
 
 on:
   schedule:
+    # 每天 UTC 00:00 运行（北京时间 08:00）
     - cron: "0 0 * * *"
+
   workflow_dispatch:
+
   push:
     branches:
       - main
@@ -21,10 +24,8 @@ jobs:
     permissions:
       contents: write
 
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
     steps:
+      # 1. 生成贡献图贪吃蛇动画
       - name: Generate snake SVG
         uses: Platane/snk@v3.4.0
         with:
@@ -34,10 +35,18 @@ jobs:
             dist/github-contribution-grid-snake-dark.svg?palette=github-dark
             dist/ocean.gif
 
+      # 2. 部署到 output 分支
       - name: Deploy to output branch
-        uses: crazy-max/ghaction-github-pages@v4.0.0
-        with:
-          target_branch: output
-          build_dir: dist
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd dist
+
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git checkout -b output
+          git add .
+          git commit -m "Generate snake animation"
+
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git push --force origin output
