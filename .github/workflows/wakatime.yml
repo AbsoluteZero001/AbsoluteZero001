@@ -4,6 +4,7 @@ on:
   schedule:
     # 每天 UTC 00:00 执行（北京时间 08:00）
     - cron: "0 0 * * *"
+
   workflow_dispatch:
 
 permissions:
@@ -13,14 +14,11 @@ jobs:
   update-wakatime:
     runs-on: ubuntu-latest
 
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
-          fetch-depth: 0  
+          fetch-depth: 0
 
       - name: Update WakaTime All Time Stats
         uses: athul/waka-readme@master
