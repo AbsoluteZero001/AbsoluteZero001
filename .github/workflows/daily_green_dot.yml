@@ -1,43 +1,58 @@
 name: Daily GitHub Green Dot
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 on:
   schedule:
+    # 每天 UTC 00:00 触发（北京时间 08:00）
     - cron: '0 0 * * *'
+
+  # 支持手动运行
   workflow_dispatch:
 
 jobs:
   daily-commit:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: true
+    # 允许 GITHUB_TOKEN 向仓库写入
+    permissions:
+      contents: write
 
+    steps:
+      # 1. 拉取仓库
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      # 2. 获取北京时间日期，并提供给后续所有 Step
+      - name: Set Beijing date
+        run: |
+          echo "DATE=$(TZ='Asia/Shanghai' date '+%Y-%m-%d')" >> "$GITHUB_ENV"
+
+      # 3. 更新 README 中的每日更新区域
       - name: Update README daily section
         run: |
-          # 使用北京时间生成日期
-          DATE=$(TZ="Asia/Shanghai" date '+%Y-%m-%d')
-
           # 删除旧的 DAILY 区块
-          sed -i '/<!--START_SECTION:DAILY-->/, /<!--END_SECTION:DAILY-->/d' README.md
+          sed -i '/<!--START_SECTION:DAILY-->/,/<!--END_SECTION:DAILY-->/d' README.md
 
           # 写入新的 DAILY 区块
           echo "<!--START_SECTION:DAILY-->" >> README.md
           echo "<img src=\"https://readme-typing-svg.demolab.com?font=Exo+2&weight=500&size=24&pause=1000&color=36BCF7,FF6EC7&background=FFFFFF00&width=500&lines=Last+update:+$DATE\" alt=\"Daily Update\"/>" >> README.md
           echo "<!--END_SECTION:DAILY-->" >> README.md
 
+      # 4. 配置 Git 提交身份
       - name: Configure Git
         run: |
           git config user.name "AbsoluteZero"
           git config user.email "186853152+AbsoluteZero001@users.noreply.github.com"
 
+      # 5. 提交并推送 README 更新
       - name: Commit and push changes
         run: |
           git add README.md
-          git commit -m "Daily progress update: $DATE" || echo "No changes to commit"
+
+          # 没有变化则正常结束，避免产生报错
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Daily progress update: $DATE"
           git push
