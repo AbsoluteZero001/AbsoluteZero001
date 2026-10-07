@@ -23,7 +23,7 @@ jobs:
 
     steps:
       # ============================================================
-      # Checkout
+      # Checkout Repository
       # ============================================================
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -51,8 +51,8 @@ jobs:
 
           TIME_RANGE: "all_time"
 
-          # 历史累计不展示语言列表
-          # 只保留 Total Time
+          # 不展示历史语言列表
+          # 只保留累计 Total Time
           LANG_COUNT: 0
 
           SECTION_NAME: "WakaTotal"
@@ -60,9 +60,11 @@ jobs:
           COMMIT_MESSAGE: "chore: update WakaTime all-time stats"
 
       # ============================================================
-      # 第一个 waka-readme 会直接提交 README
-      # 因此重新同步 main
-      # 确保第二次修改基于最新 README
+      # 同步第一个 WakaTime Action 提交后的最新 README
+      #
+      # 第一个 waka-readme 会直接修改并提交 README
+      # 第二个任务开始前重新同步 main
+      # 避免两个 Section 更新时发生冲突
       # ============================================================
       - name: Sync latest repository
         run: |
@@ -74,7 +76,7 @@ jobs:
       #
       # 只统计最近 30 天
       # 展示最近 30 天 Total Time
-      # 展示最近 30 天出现过的全部语言 / 文件类型
+      # 展示最近 30 天语言 Top 10
       # ============================================================
       - name: Update WakaTime Last 30 Days Stats
         uses: athul/waka-readme@master
@@ -90,9 +92,8 @@ jobs:
 
           TIME_RANGE: "last_30_days"
 
-          # -1 = 不限制语言数量
-          # 展示最近 30 天出现过的全部语言 / 文件类型
-          LANG_COUNT: -1
+          # 最近 30 天只展示使用时间最多的 10 项
+          LANG_COUNT: 10
 
           SECTION_NAME: "WakaLast30Days"
 
