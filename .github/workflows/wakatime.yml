@@ -2,8 +2,11 @@ name: Update WakaTime Stats
 
 on:
   schedule:
+    # 每天 UTC 00:00 执行
+    # 北京时间 / 新加坡时间 08:00
     - cron: "0 0 * * *"
 
+  # 支持 GitHub Actions 页面手动执行
   workflow_dispatch:
 
 permissions:
@@ -13,45 +16,81 @@ jobs:
   update-wakatime:
     runs-on: ubuntu-latest
 
+    # 防止多个 README 更新任务同时修改仓库
     concurrency:
       group: readme-update
       cancel-in-progress: false
 
     steps:
+      # ============================================================
+      # Checkout
+      # ============================================================
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
+      # ============================================================
+      # ① WakaTime All Time
+      #
+      # 从开始使用 WakaTime 至今
+      # 展示历史累计的全部语言 / 文件类型
+      # ============================================================
       - name: Update WakaTime All Time Stats
         uses: athul/waka-readme@master
         with:
           WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
           REPOSITORY: "AbsoluteZero001/AbsoluteZero001"
+
           SHOW_TITLE: true
           SHOW_TIME: true
           SHOW_TOTAL: true
+
           TIME_RANGE: "all_time"
+
+          # -1 = 不限制显示数量
+          # 展示历史记录中的全部语言 / 文件类型
           LANG_COUNT: -1
+
           SECTION_NAME: "WakaTotal"
+
           COMMIT_MESSAGE: "chore: update WakaTime all-time stats"
 
+      # ============================================================
+      # 第一个 waka-readme 会直接提交 README
+      # 因此重新同步 main，确保第二次修改基于最新 README
+      # ============================================================
       - name: Sync latest repository
         run: |
           git fetch origin main
           git reset --hard origin/main
 
-      - name: Update WakaTime Last 30 Days Language Stats
+      # ============================================================
+      # ② WakaTime Last 30 Days
+      #
+      # 只统计最近 30 天
+      # 展示这 30 天内实际出现过的全部语言 / 文件类型
+      # ============================================================
+      - name: Update WakaTime Last 30 Days Stats
         uses: athul/waka-readme@master
         with:
           WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
           REPOSITORY: "AbsoluteZero001/AbsoluteZero001"
+
           SHOW_TITLE: true
           SHOW_TIME: true
-          SHOW_TOTAL: false
+          SHOW_TOTAL: true
+
           TIME_RANGE: "last_30_days"
-          LANG_COUNT: 10
+
+          # 不限制为 Top 10
+          # 展示最近 30 天出现过的全部语言 / 文件类型
+          LANG_COUNT: -1
+
           SECTION_NAME: "WakaLast30Days"
+
           COMMIT_MESSAGE: "chore: update WakaTime 30-day stats"
