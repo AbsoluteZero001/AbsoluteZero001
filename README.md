@@ -24,90 +24,15 @@
 
 
 
-
 <!--START_SECTION:WakaTotal-->
-
-```txt
-From: 14 October 2025 - To: 06 October 2026
-
-Total Time: 271 hrs 16 mins
-
-Java                       130 hrs 4 mins        ███████████▓░░░░░░░░░░░░░   47.22 %
-HTML                       24 hrs 44 mins        ██▒░░░░░░░░░░░░░░░░░░░░░░   08.98 %
-Markdown                   17 hrs 48 mins        █▓░░░░░░░░░░░░░░░░░░░░░░░   06.46 %
-SQL                        13 hrs 2 mins         █▒░░░░░░░░░░░░░░░░░░░░░░░   04.73 %
-XML                        11 hrs 45 mins        █░░░░░░░░░░░░░░░░░░░░░░░░   04.27 %
-YAML                       11 hrs 32 mins        █░░░░░░░░░░░░░░░░░░░░░░░░   04.19 %
-Vue                        11 hrs 2 mins         █░░░░░░░░░░░░░░░░░░░░░░░░   04.01 %
-Python                     8 hrs 58 mins         ▓░░░░░░░░░░░░░░░░░░░░░░░░   03.26 %
-Text                       6 hrs 24 mins         ▓░░░░░░░░░░░░░░░░░░░░░░░░   02.33 %
-TypeScript                 4 hrs 30 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.64 %
-Other                      4 hrs 12 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.53 %
-Batchfile                  3 hrs 23 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.23 %
-JavaScript                 3 hrs 21 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.22 %
-CSS                        3 hrs 4 mins          ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.11 %
-JSON                       2 hrs 59 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.09 %
-GitIgnore file             2 hrs 31 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   00.92 %
-Astro                      2 hrs 18 mins         ▒░░░░░░░░░░░░░░░░░░░░░░░░   00.84 %
-Batch                      1 hr 39 mins          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.60 %
-textmate                   1 hr 38 mins          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.60 %
-CLASS                      1 hr 36 mins          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.58 %
-PHP                        1 hr 27 mins          ░░░░░░░░░░░░░░░░░░░░░░░░░   00.53 %
-C                          1 hr 7 mins           ░░░░░░░░░░░░░░░░░░░░░░░░░   00.41 %
-PowerShell                 1 hr 6 mins           ░░░░░░░░░░░░░░░░░░░░░░░░░   00.40 %
-Git Config                 1 hr 1 min            ░░░░░░░░░░░░░░░░░░░░░░░░░   00.37 %
-Java Properties            58 mins               ░░░░░░░░░░░░░░░░░░░░░░░░░   00.36 %
-Docker                     43 mins               ░░░░░░░░░░░░░░░░░░░░░░░░░   00.26 %
-Bash                       41 mins               ░░░░░░░░░░░░░░░░░░░░░░░░░   00.25 %
-Kotlin                     20 mins               ░░░░░░░░░░░░░░░░░░░░░░░░░   00.13 %
-Properties                 19 mins               ░░░░░░░░░░░░░░░░░░░░░░░░░   00.12 %
-Git                        13 mins               ░░░░░░░░░░░░░░░░░░░░░░░░░   00.08 %
-.env file                  9 mins                ░░░░░░░░░░░░░░░░░░░░░░░░░   00.06 %
-Svelte                     8 mins                ░░░░░░░░░░░░░░░░░░░░░░░░░   00.05 %
-Image (svg)                6 mins                ░░░░░░░░░░░░░░░░░░░░░░░░░   00.04 %
-RPMSpec                    5 mins                ░░░░░░░░░░░░░░░░░░░░░░░░░   00.03 %
-TSConfig                   4 mins                ░░░░░░░░░░░░░░░░░░░░░░░░░   00.03 %
-Nginx configuration file   3 mins                ░░░░░░░░░░░░░░░░░░░░░░░░░   00.02 %
-Groovy                     3 mins                ░░░░░░░░░░░░░░░░░░░░░░░░░   00.02 %
-Gradle                     2 mins                ░░░░░░░░░░░░░░░░░░░░░░░░░   00.01 %
-Makefile                   1 min                 ░░░░░░░░░░░░░░░░░░░░░░░░░   00.01 %
-Shell Script               0 secs                ░░░░░░░░░░░░░░░░░░░░░░░░░   00.01 %
-HTTP Request               0 secs                ░░░░░░░░░░░░░░░░░░░░░░░░░   00.01 %
-DockerIgnore file          0 secs                ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 %
-Manifest                   0 secs                ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 %
-Requirements.txt           0 secs                ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 %
-IDEA_MODULE                0 secs                ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 %
-Cookie storage file        0 secs                ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 %
-SourceMap                  0 secs                ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 %
-```
-
 <!--END_SECTION:WakaTotal-->
 
 
-
-<!--
-
 ### 🧑‍💻 最近 30 天语言统计 🕒
-START_SECTION:WakaLast30Days
 
-```txt
-From: 25 April 2026 - To: 25 May 2026
+<!--START_SECTION:WakaLast30Days-->
+<!--END_SECTION:WakaLast30Days-->
 
-Java                       9 hrs 18 mins         ██████▒░░░░░░░░░░░░░░░░░░   25.54 %
-Vue                        4 hrs 58 mins         ███▒░░░░░░░░░░░░░░░░░░░░░   13.62 %
-SQL                        4 hrs 39 mins         ███▒░░░░░░░░░░░░░░░░░░░░░   12.77 %
-YAML                       2 hrs 40 mins         █▓░░░░░░░░░░░░░░░░░░░░░░░   07.32 %
-Batchfile                  2 hrs 23 mins         █▓░░░░░░░░░░░░░░░░░░░░░░░   06.56 %
-Markdown                   2 hrs 15 mins         █▓░░░░░░░░░░░░░░░░░░░░░░░   06.17 %
-HTML                       2 hrs 6 mins          █▒░░░░░░░░░░░░░░░░░░░░░░░   05.78 %
-TypeScript                 1 hr 44 mins          █▒░░░░░░░░░░░░░░░░░░░░░░░   04.78 %
-JSON                       1 hr 28 mins          █░░░░░░░░░░░░░░░░░░░░░░░░   04.03 %
-Batch                      1 hr 5 mins           ▓░░░░░░░░░░░░░░░░░░░░░░░░   02.98 %
-```
-
-END_SECTION:WakaLast30Days
-
--->
 
 
 <table width="100%">
