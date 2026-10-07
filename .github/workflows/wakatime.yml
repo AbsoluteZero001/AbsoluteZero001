@@ -3,7 +3,7 @@ name: Update WakaTime Stats
 on:
   schedule:
     # 每天 UTC 00:00 执行
-    # 北京时间 / 新加坡时间 08:00
+    # 北京时间 08:00
     - cron: "0 0 * * *"
 
   # 支持 GitHub Actions 页面手动执行
@@ -34,7 +34,8 @@ jobs:
       # ① WakaTime All Time
       #
       # 从开始使用 WakaTime 至今
-      # 展示历史累计的全部语言 / 文件类型
+      # 只展示累计 Total Time
+      # 不展示历史语言列表
       # ============================================================
       - name: Update WakaTime All Time Stats
         uses: athul/waka-readme@master
@@ -50,9 +51,9 @@ jobs:
 
           TIME_RANGE: "all_time"
 
-          # -1 = 不限制显示数量
-          # 展示历史记录中的全部语言 / 文件类型
-          LANG_COUNT: -1
+          # 历史累计不展示语言列表
+          # 只保留 Total Time
+          LANG_COUNT: 0
 
           SECTION_NAME: "WakaTotal"
 
@@ -60,7 +61,8 @@ jobs:
 
       # ============================================================
       # 第一个 waka-readme 会直接提交 README
-      # 因此重新同步 main，确保第二次修改基于最新 README
+      # 因此重新同步 main
+      # 确保第二次修改基于最新 README
       # ============================================================
       - name: Sync latest repository
         run: |
@@ -71,7 +73,8 @@ jobs:
       # ② WakaTime Last 30 Days
       #
       # 只统计最近 30 天
-      # 展示这 30 天内实际出现过的全部语言 / 文件类型
+      # 展示最近 30 天 Total Time
+      # 展示最近 30 天出现过的全部语言 / 文件类型
       # ============================================================
       - name: Update WakaTime Last 30 Days Stats
         uses: athul/waka-readme@master
@@ -87,7 +90,7 @@ jobs:
 
           TIME_RANGE: "last_30_days"
 
-          # 不限制为 Top 10
+          # -1 = 不限制语言数量
           # 展示最近 30 天出现过的全部语言 / 文件类型
           LANG_COUNT: -1
 
