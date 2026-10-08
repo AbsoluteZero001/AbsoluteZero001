@@ -21,7 +21,7 @@ SVG_NS = "http://www.w3.org/2000/svg"
 ET.register_namespace("", SVG_NS)
 
 WIDTH = 1400
-HEIGHT = 900
+HEIGHT = 970
 
 AVATAR_X = 35
 AVATAR_Y = 95
@@ -117,7 +117,9 @@ def calculate_uptime(created_at):
         years -= 1
         months += 12
 
-    return f"{years} years, {months} months"
+    year_unit = "year" if years == 1 else "years"
+    month_unit = "month" if months == 1 else "months"
+    return f"{years} {year_unit}, {months} {month_unit}"
 
 
 def get_user_data():
@@ -391,7 +393,7 @@ def embed_avatar(parent):
     )
 
     # 同时限制头像宽度和高度，防止超出卡片
-    max_height = HEIGHT - AVATAR_Y - 40
+    max_height = 900 - AVATAR_Y - 40
 
     scale = min(
         AVATAR_WIDTH / original_width,
@@ -430,7 +432,7 @@ def draw_languages(parent, languages):
         add_text(
             parent,
             INFO_X,
-            640,
+            680,
             "No language statistics available",
             MUTED,
             17,
@@ -441,7 +443,7 @@ def draw_languages(parent, languages):
     # 展示前 8 种语言
     top_languages = languages[:8]
 
-    start_y = 625
+    start_y = 680
     row_height = 29
 
     bar_x = INFO_X + 170
@@ -507,7 +509,7 @@ def draw_languages(parent, languages):
         )
 
     # 底部彩色语言汇总条
-    rainbow_y = 865
+    rainbow_y = 930
     rainbow_x = INFO_X
     rainbow_width = 420
 
@@ -661,7 +663,7 @@ def generate_profile():
         root,
         195,
         "Shell",
-        "PowerShell · Bash",
+        "Bash · PowerShell",
         GREEN,
     )
 
@@ -680,7 +682,7 @@ def generate_profile():
     add_info(
         root,
         270,
-        "Uptime",
+        "GitHub Age",
         user["uptime"],
         GREEN,
     )
@@ -689,7 +691,7 @@ def generate_profile():
         root,
         300,
         "Repos",
-        f'{user["repos"]} repositories',
+        str(user["repos"]),
         BLUE,
     )
 
@@ -724,58 +726,23 @@ def generate_profile():
     )
 
     # ========================================================
-    # 技术方向
+    # 技术方向（最终定稿）
     # ========================================================
 
-    add_info(
-        root,
-        435,
-        "Focus",
-        "Full-Stack · Java Backend",
-        GREEN,
-    )
-
-    add_info(
-        root,
-        465,
-        "DevOps",
-        "Linux · CI/CD · Docker",
-        GREEN,
-    )
-
-    add_info(
-        root,
-        495,
-        "Security",
-        "Kali Linux · Networking",
-        GREEN,
-    )
-
-    add_info(
-        root,
-        525,
-        "Site",
-        "evezero.cn",
-        GREEN,
-    )
-
-    # 分隔线
-    add_line(
-        root,
-        INFO_X,
-        560,
-        WIDTH - 50,
-        560,
-    )
+    add_info(root, 435, "Focus", "Full-Stack · Java Backend", GREEN)
+    add_info(root, 465, "DevOps", "Linux · Docker · K8s · CI/CD", GREEN)
+    add_info(root, 495, "NetSec", "Kali · Networking · Cybersecurity", GREEN, size=16)
+    add_info(root, 525, "Stack", "Spring Boot · Redis · Kafka", GREEN)
+    add_info(root, 555, "AI", "LLM · Ollama · AI Agents", GREEN)
+    add_info(root, 590, "Site", "evezero.cn", GREEN)
 
     # ========================================================
-    # 编程语言统计
+    # 编程语言统计（公开非 Fork 仓库的代码字节占比）
     # ========================================================
 
-    draw_languages(
-        root,
-        languages,
-    )
+    add_line(root, INFO_X, 615, WIDTH - 50, 615)
+    add_text(root, INFO_X, 645, "Languages · Public Repositories", MUTED, 16)
+    draw_languages(root, languages)
 
     # ========================================================
     # 保存 SVG
@@ -805,7 +772,7 @@ def generate_profile():
     print("Repositories:", user["repos"])
     print("Followers:", user["followers"])
     print("Following:", user["following"])
-    print("Uptime:", user["uptime"])
+    print("GitHub Age:", user["uptime"])
     print("Commits:", commit_text)
     print("Languages:", len(languages))
     print("Output:", OUTPUT_FILE)
