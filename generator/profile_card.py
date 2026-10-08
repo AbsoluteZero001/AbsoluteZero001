@@ -540,76 +540,95 @@ def embed_avatar(parent):
             deepcopy(element)
         )
 
-    # Extend the ASCII texture into the unused top and bottom bands.
-    # The original avatar remains a centered, uniformly scaled 1:1 image.
-    # Only narrow edge rows are repeated; no stretching or cropping of the avatar.
-    fill_avatar_vertical_gaps(parent, avatar_root, left, top, right, bottom,
-                              scale, translate_x, translate_y)
+    # Draw additional, independent ASCII rows outside the unchanged avatar.
+    fill_avatar_vertical_gaps(parent, avatar_root, top, bottom, scale,
+                              translate_x, translate_y)
 
 
-def fill_avatar_vertical_gaps(parent, avatar_root, left, top, right, bottom,
-                              scale, translate_x, translate_y):
-    """Continue the avatar's own colored ASCII rows above and below its square."""
-    ink_top = top * scale + translate_y
-    ink_bottom = bottom * scale + translate_y
-    top_limit = HEADER_HEIGHT + 10
-    bottom_limit = HEIGHT - 15
+def fill_avatar_vertical_gaps(parent, avatar_root, top, bottom, scale,
+                              translate_x, translate_y):
+    """Fill only the blank bands with newly composed ASCII, never stretch avatar."""
+    import random
 
-    # Only use the actual ASCII text nodes, retaining their individual colors.
-    glyphs = [node for node in avatar_root.iter()
-              if node.tag.rsplit("}", 1)[-1] == "text"
-              and (node.text or "").strip()
-              and node.get("y") is not None]
-    if not glyphs:
+    nodes = [n for n in avatar_root.iter()
+             if n.tag.rsplit("}", 1)[-1] == "text"
+             and (n.text or "").strip()
+             and n.get("x") is not None and n.get("y") is not None]
+    if not nodes:
         return
 
-    # Derive row pitch from the source glyph coordinates rather than guessing.
-    ys = sorted({round(svg_number(node.get("y")), 3) for node in glyphs})
-    pitches = [b - a for a, b in zip(ys, ys[1:]) if b - a > 0.5]
-    pitch = min(pitches) if pitches else 12.0
-    pitch = max(pitch, 1.0)
-    edge_rows = 5
+    # The source row pitch is used unchanged, including glyph size and colors.
+    rows = {}
+    for n in nodes:
+        y = round(svg_number(n.get("y")), 3)
+        rows.setdefault(y, []).append(n)
+    ys = sorted(rows)
+    diffs = [b - a for a, b in zip(ys, ys[1:]) if b - a > 0.5]
+    if not diffs:
+        return
+    diffs.sort()
+    pitch = diffs[len(diffs) // 2]
+    top_y = top * scale + translate_y
+    bottom_y = bottom * scale + translate_y
+    upper_limit = HEADER_HEIGHT + 10
+    lower_limit = HEIGHT - 15
+    rng = random.Random(20261008)
 
-    # Use a small slice from each edge, repeating it outward. Clip every
-    # extension so that the square avatar remains pixel-for-pixel unchanged.
-    definitions = parent.find(svg_element("defs"))
-    if definitions is None:
-        definitions = ET.Element(svg_element("defs"))
-        parent.insert(0, definitions)
+    defs = parent.find(svg_element("defs"))
+    if defs is None:
+        defs = ET.Element(svg_element("defs"))
+        parent.insert(0, defs)
 
-    for side, gap_start, gap_end in (
-        ("top", top_limit, ink_top),
-        ("bottom", ink_bottom, bottom_limit),
-    ):
-        if gap_end <= gap_start:
+    for side, limit_a, limit_b in (("top", upper_limit, top_y),
+                                   ("bottom", bottom_y, lower_limit)):
+        if limit_b <= limit_a:
             continue
-        clip_id = f"ascii-extension-{side}"
-        clip = ET.SubElement(definitions, svg_element("clipPath"), {"id": clip_id})
-        add_rect(clip, AVATAR_LEFT, gap_start,
-                 AVATAR_RIGHT - AVATAR_LEFT, gap_end - gap_start, "white")
-        wrapper = ET.SubElement(parent, svg_element("g"),
-                                {"clip-path": f"url(#{clip_id})"})
-        if side == "top":
-            selected = [n for n in glyphs
-                        if svg_number(n.get("y")) <= ys[0] + edge_rows * pitch]
-            direction = -1
-        else:
-            selected = [n for n in glyphs
-                        if svg_number(n.get("y")) >= ys[-1] - edge_rows * pitch]
-            direction = 1
-        band = max(edge_rows * pitch * scale, 1)
-        gap = gap_end - gap_start
-        repeats = int(gap / band) + 3
-        for index in range(1, repeats + 1):
-            offset = direction * index * band
-            layer = ET.SubElement(wrapper, svg_element("g"), {
-                "transform": (f"translate({translate_x:.3f},"
-                              f"{translate_y + offset:.3f}) scale({scale:.6f})"),
-                "xml:space": "preserve",
-                "opacity": "0.88",
-            })
-            for node in selected:
-                layer.append(deepcopy(node))
+        clip_id = f"ascii-fill-{side}"
+        clip = ET.SubElement(defs, svg_element("clipPath"), {"id": clip_id})
+        add_rect(clip, AVATAR_LEFT, limit_a, AVATAR_RIGHT - AVATAR_LEFT,
+                 limit_b - limit_a, "white")
+        layer = ET.SubElement(parent, svg_element("g"), {
+            "clip-path": f"url(#{clip_id})", "xml:space": "preserve"})
+
+        # Sample nearby original glyphs for their x positions and colors, but
+        # synthesize NEW character content for each added row (no tiled copies).
+        edge_ys = ys[:min(4, len(ys))] if side == "top" else ys[-min(4, len(ys)):]
+        step = pitch * scale
+        if step <= 0:
+            continue
+        count = int((limit_b - limit_a) / step) + 2
+        for index in range(1, count + 1):
+            reference_y = edge_ys[(index - 1) % len(edge_ys)]
+            base_y = (ys[0] if side == "top" else ys[-1])
+            target_y = base_y + (-index if side == "top" else index) * pitch
+            target_screen_y = target_y * scale + translate_y
+            if not (limit_a - step <= target_screen_y <= limit_b + step):
+                continue
+            for original in rows[reference_y]:
+                clone = deepcopy(original)
+                source = original.text or ""
+                # Keep whitespace, glyph density, and the original color.
+                # Vary ASCII punctuation without reproducing an avatar edge row.
+                alphabet = "=+-:*#%@"
+                chars = []
+                for ch in source:
+                    if ch.isspace():
+                        chars.append(ch)
+                    elif ch in "@%#":
+                        chars.append(rng.choice("@%#*"))
+                    elif ch in "=+-_":
+                        chars.append(rng.choice("=+-"))
+                    else:
+                        chars.append(rng.choice(alphabet))
+                clone.text = "".join(chars)
+                clone.set("y", f"{target_y:.3f}")
+                # Source glyphs may have different row baselines; x remains intact.
+                layer.append(ET.Element(svg_element("g"), {
+                    "transform": (f"translate({translate_x:.3f},"
+                                  f"{translate_y:.3f}) scale({scale:.6f})"),
+                    "xml:space": "preserve"
+                }))
+                layer[-1].append(clone)
 
 
 # ============================================================
