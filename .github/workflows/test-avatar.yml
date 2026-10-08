@@ -8,29 +8,61 @@ permissions:
 
 jobs:
   test-avatar:
+    name: Generate ASCII Avatar
     runs-on: ubuntu-24.04
 
     steps:
+      # 1. 拉取 GitHub 仓库
       - name: Checkout repository
         uses: actions/checkout@v5
 
+      # 2. 配置 Python 运行环境
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
+      # 3. 安装 Python 依赖
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
 
+      # 4. 下载 GitHub 头像
       - name: Download GitHub Avatar
         run: python generator/avatar.py
 
-      - name: Upload Avatar
+      # 5. 将头像转换为彩色 ASCII SVG
+      - name: Generate ASCII Avatar
+        run: python generator/ascii_art.py
+
+      # 6. 验证文件是否生成成功
+      - name: Verify generated files
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+
+          avatar = Path("cache/avatar.png")
+          svg = Path("cache/avatar.svg")
+
+          assert avatar.is_file(), "Avatar PNG not found"
+          assert svg.is_file(), "ASCII SVG not found"
+
+          ET.parse(svg)
+
+          print("Avatar PNG:", avatar.stat().st_size, "bytes")
+          print("ASCII SVG:", svg.stat().st_size, "bytes")
+          print("SVG validation passed")
+          PY
+
+      # 7. 上传头像及 ASCII SVG
+      - name: Upload Avatar Preview
         uses: actions/upload-artifact@v7
         with:
-          name: github-avatar
-          path: cache/avatar.png
+          name: github-avatar-preview
+          path: |
+            cache/avatar.png
+            cache/avatar.svg
           if-no-files-found: error
           retention-days: 7
