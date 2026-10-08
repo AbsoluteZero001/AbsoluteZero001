@@ -152,18 +152,55 @@ jobs:
 
 
       # ------------------------------------------------------
-      # 10. 自动提交并推送 SVG
+      # 10. 自动提交并推送 SVG（自动处理并发更新）
       # ------------------------------------------------------
 
       - name: Commit and push profile.svg
+        shell: bash
         run: |
-          git add -f profile.svg
+          set -euo pipefail
 
-          if git diff --cached --quiet; then
-            echo "profile.svg has not changed."
-            echo "No commit required."
-          else
+          # 保存本次生成的 SVG，避免同步分支时丢失
+          cp profile.svg /tmp/neofetch-profile.svg
+
+          # 最多重试 5 次
+          for attempt in 1 2 3 4 5; do
+
+            echo "================================"
+            echo "Push attempt: $attempt"
+            echo "================================"
+
+            # 获取远程最新 main
+            git fetch origin main
+
+            # 将当前工作区同步到远程最新 main
+            git reset --hard origin/main
+
+            # 恢复本次生成的 SVG
+            cp /tmp/neofetch-profile.svg profile.svg
+
+            # 添加生成文件
+            git add -f profile.svg
+
+            # 检查是否有变化
+            if git diff --cached --quiet; then
+              echo "profile.svg is already up to date."
+              exit 0
+            fi
+
+            # 创建提交
             git commit -m "chore: update Neofetch profile card"
-            git push
-            echo "profile.svg updated successfully."
-          fi
+
+            # 尝试推送
+            if git push origin HEAD:main; then
+              echo "profile.svg updated successfully."
+              exit 0
+            fi
+
+            echo "Remote branch changed. Retrying..."
+            sleep 5
+
+          done
+
+          echo "Failed to push after 5 attempts."
+          exit 1
