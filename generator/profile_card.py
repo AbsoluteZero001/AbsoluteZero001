@@ -46,8 +46,13 @@ RIGHT_EDGE = WIDTH - 35
 
 AVATAR_LEFT = 20
 AVATAR_RIGHT = INFO_X - 18
-AVATAR_TOP = 61
-AVATAR_BOTTOM = 711
+# A square viewport, centered vertically against the right-hand content.
+# The ASCII glyphs retain their original aspect ratio and are never cropped.
+CONTENT_TOP = 76
+CONTENT_BOTTOM = 727
+AVATAR_SIZE = AVATAR_RIGHT - AVATAR_LEFT
+AVATAR_TOP = CONTENT_TOP + (CONTENT_BOTTOM - CONTENT_TOP - AVATAR_SIZE) / 2
+AVATAR_BOTTOM = AVATAR_TOP + AVATAR_SIZE
 
 FONT_FAMILY = "Consolas, 'DejaVu Sans Mono', 'Liberation Mono', monospace"
 BODY_SIZE = 18
@@ -537,7 +542,7 @@ def embed_avatar(parent):
 
 
 # ============================================================
-# Terminal-style language bars and ANSI palette
+# Terminal-style language meters and proportional distribution bar
 # ============================================================
 
 def draw_terminal_meter(
@@ -646,42 +651,36 @@ def draw_languages(parent, languages):
                 17,
             )
 
-    # 16-color ANSI-style terminal palette.
-    palette = [
-        "#FF5F57",
-        "#FF875F",
-        "#FFAF00",
-        "#FFD75F",
-        "#87D700",
-        "#00D787",
-        "#00AF87",
-        "#00AFFF",
-        "#5F87FF",
-        "#875FFF",
-        "#AF87FF",
-        "#FF87D7",
-        "#87D7FF",
-        "#5FD7FF",
-        "#B2F7FF",
-        "#D6DEE9",
-    ]
-
+    # Proportional stacked bar for ALL languages, not just the Top 8.
+    # Each segment width reflects GitHub's language byte counts.
     strip_x = INFO_X
     strip_y = 707
-    strip_width = 280
+    strip_width = min(450, RIGHT_EDGE - INFO_X)
     strip_height = 20
 
-    cell_width = strip_width / len(palette)
+    add_rect(parent, strip_x, strip_y, strip_width, strip_height, "#15202A")
 
-    for index, color in enumerate(palette):
-        add_rect(
-            parent,
-            strip_x + index * cell_width,
-            strip_y,
-            cell_width + 0.08,
-            strip_height,
-            color,
-        )
+    if languages:
+        # Normalize against the sum to avoid gaps from floating point rounding.
+        total_percentage = sum(max(0.0, item["percentage"]) for item in languages)
+        if total_percentage > 0:
+            cursor = strip_x
+            for index, entry in enumerate(languages):
+                segment_width = (
+                    strip_width * max(0.0, entry["percentage"]) / total_percentage
+                )
+                if index == len(languages) - 1:
+                    segment_width = max(0.0, strip_x + strip_width - cursor)
+                if segment_width > 0:
+                    add_rect(
+                        parent,
+                        cursor,
+                        strip_y,
+                        segment_width,
+                        strip_height,
+                        entry["color"],
+                    )
+                cursor += segment_width
 
 
 # ============================================================
