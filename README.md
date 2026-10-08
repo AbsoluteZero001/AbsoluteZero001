@@ -2,6 +2,11 @@
 [![Typing SVG](https://readme-typing-svg.demolab.com?font=Exo+2&weight=500&size=30&pause=1000&color=36BCF7&background=FFFFFF00&random=true&width=500&lines=Hello%2C+I'm+Tang+Jinjie;Java+Backend+Developer;Never+Stop+Improving)](https://git.io/typing-svg)
 
 
+<p align="center">
+  <img src="./profile.svg"
+       alt="AbsoluteZero001 Neofetch Profile"
+       width="100%" />
+</p>
 
 
 ## 🛠️ Tech Stack | 语言和工具
