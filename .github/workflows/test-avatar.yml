@@ -1,4 +1,4 @@
-name: Test GitHub Avatar
+name: Test Neofetch Profile Card
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   test-avatar:
-    name: Generate ASCII Avatar
+    name: Generate Neofetch Profile
     runs-on: ubuntu-24.04
 
     steps:
@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
-      # 2. 配置 Python 运行环境
+      # 2. 配置 Python 环境
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
@@ -32,37 +32,62 @@ jobs:
       - name: Download GitHub Avatar
         run: python generator/avatar.py
 
-      # 5. 将头像转换为彩色 ASCII SVG
+      # 5. 将头像转换为彩色 ASCII 字符画
       - name: Generate ASCII Avatar
         run: python generator/ascii_art.py
 
-      # 6. 验证文件是否生成成功
-      - name: Verify generated files
+      # 6. 生成完整 Neofetch 终端卡片
+      - name: Generate Neofetch Profile
+        run: python generator/profile_card.py
+
+      # 7. 验证所有生成文件
+      - name: Verify Generated Files
         run: |
           python - <<'PY'
           from pathlib import Path
           import xml.etree.ElementTree as ET
 
-          avatar = Path("cache/avatar.png")
-          svg = Path("cache/avatar.svg")
+          files = [
+              Path("cache/avatar.png"),
+              Path("cache/avatar.svg"),
+              Path("cache/profile.svg"),
+          ]
 
-          assert avatar.is_file(), "Avatar PNG not found"
-          assert svg.is_file(), "ASCII SVG not found"
+          for file in files:
+              if not file.is_file():
+                  raise FileNotFoundError(
+                      f"Required file not found: {file}"
+                  )
 
-          ET.parse(svg)
+              if file.stat().st_size == 0:
+                  raise ValueError(
+                      f"Generated file is empty: {file}"
+                  )
 
-          print("Avatar PNG:", avatar.stat().st_size, "bytes")
-          print("ASCII SVG:", svg.stat().st_size, "bytes")
-          print("SVG validation passed")
+              print(
+                  f"PASS: {file} "
+                  f"({file.stat().st_size:,} bytes)"
+              )
+
+          # 验证头像 SVG
+          ET.parse("cache/avatar.svg")
+          print("PASS: Avatar SVG XML valid")
+
+          # 验证 Neofetch SVG
+          ET.parse("cache/profile.svg")
+          print("PASS: Profile SVG XML valid")
+
+          print("All validation checks passed!")
           PY
 
-      # 7. 上传头像及 ASCII SVG
-      - name: Upload Avatar Preview
+      # 8. 上传全部预览文件
+      - name: Upload Neofetch Preview
         uses: actions/upload-artifact@v7
         with:
-          name: github-avatar-preview
+          name: neofetch-profile-preview
           path: |
             cache/avatar.png
             cache/avatar.svg
+            cache/profile.svg
           if-no-files-found: error
           retention-days: 7
