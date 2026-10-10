@@ -823,30 +823,32 @@ def generate_profile():
     )
 
     # ========================================================
-    # Beijing clock — generated timestamp, accurate to seconds.
-    # GitHub README treats SVG as a static image, so the display
-    # updates only when the SVG is regenerated, not every second.
+    # LAST UPDATED: Beijing time when this SVG is generated.
+    # First line: timezone + update label; second: timestamp.
+    # This is a static SVG timestamp, not a live clock.
+    # The age-only updater can modify this value on birthdays.
     # ========================================================
-    clock_now = datetime.now(CLOCK_TZ)
+    rendered_at = datetime.now(CLOCK_TZ)
     add_text(
         root,
         RIGHT_EDGE,
         63,
-        CLOCK_TZ_LABEL,
+        f"{CLOCK_TZ_LABEL}\u00a0\u00a0LAST UPDATED",
         color=MUTED,
-        size=14,
+        size=13,
         anchor="end",
     )
-    add_text(
+    updated_text = add_text(
         root,
         RIGHT_EDGE,
         84,
-        clock_now.strftime("%Y-%m-%d  %H:%M:%S"),
+        rendered_at.strftime("%Y-%m-%d  %H:%M:%S"),
         color=BLUE,
         size=17,
         weight="bold",
         anchor="end",
     )
+    updated_text.set("id", "profile-last-updated")
 
     add_line(
         root,
