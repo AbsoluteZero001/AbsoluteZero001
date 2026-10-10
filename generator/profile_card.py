@@ -67,6 +67,10 @@ GREEN = "#50FA7B"
 BLUE = "#63C5FF"
 YELLOW = "#F1C40F"
 
+# Fixed Beijing timezone, independent of the machine / CI runner timezone.
+CLOCK_TZ = timezone(timedelta(hours=8))
+CLOCK_TZ_LABEL = "CN · UTC+08:00"
+
 LANGUAGE_COLORS = {
     "Java": "#F89820",
     "Python": "#3776AB",
@@ -896,6 +900,32 @@ def generate_profile():
         GREEN,
         size=20,
         weight="bold",
+    )
+
+    # ========================================================
+    # Beijing clock — generated timestamp, accurate to seconds.
+    # GitHub README treats SVG as a static image, so the display
+    # updates only when the SVG is regenerated, not every second.
+    # ========================================================
+    clock_now = datetime.now(CLOCK_TZ)
+    add_text(
+        root,
+        RIGHT_EDGE,
+        63,
+        CLOCK_TZ_LABEL,
+        color=MUTED,
+        size=14,
+        anchor="end",
+    )
+    add_text(
+        root,
+        RIGHT_EDGE,
+        84,
+        clock_now.strftime("%Y-%m-%d  %H:%M:%S"),
+        color=BLUE,
+        size=17,
+        weight="bold",
+        anchor="end",
     )
 
     add_line(
