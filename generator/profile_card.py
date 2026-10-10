@@ -2,12 +2,14 @@ from __future__ import annotations
 
 from collections import defaultdict
 from copy import deepcopy
-from datetime import date, datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import os
 import xml.etree.ElementTree as ET
 
 import requests
+
+from age_utils import calculate_age
 
 
 # ============================================================
@@ -59,29 +61,6 @@ CLOCK_TZ = timezone(timedelta(hours=8))
 CLOCK_TZ_LABEL = "CN · UTC+08:00"
 
 
-def calculate_age(today: date | None = None) -> int:
-    """Whole years using the Beijing date; never embed or print the secret."""
-    birth_date_value = os.environ.get("BIRTH_DATE", "")
-    if not birth_date_value:
-        raise RuntimeError(
-            "BIRTH_DATE is missing. Pass the Actions secret into the profile generation step."
-        )
-
-    try:
-        birthday = date.fromisoformat(birth_date_value)
-        # Require an unambiguous canonical ISO date.
-        if birthday.isoformat() != birth_date_value:
-            raise ValueError("Noncanonical date")
-    except ValueError:
-        raise ValueError("BIRTH_DATE must be a valid YYYY-MM-DD date") from None
-
-    today = today if today is not None else datetime.now(CLOCK_TZ).date()
-    if birthday > today:
-        raise ValueError("BIRTH_DATE cannot be in the future")
-
-    return today.year - birthday.year - (
-        (today.month, today.day) < (birthday.month, birthday.day)
-    )
 
 LANGUAGE_COLORS = {
     "Java": "#F89820",
@@ -569,7 +548,8 @@ def draw_identity_terminal(parent, age: int) -> None:
     command(665, "whoami")
     add_text(parent, TERMINAL_X, 686, "absolutezero", color=TEXT, size=16)
     command(710, "age")  # Custom informational command, not standard Linux.
-    add_text(parent, TERMINAL_X, 731, f"{age} years", color=TEXT, size=16)
+    age_label = add_text(parent, TERMINAL_X, 731, f"{age} years", color=TEXT, size=16)
+    age_label.set("id", "profile-age")  # Dedicated midnight update target.
 
 
 # ============================================================
