@@ -46,13 +46,14 @@ RIGHT_EDGE = WIDTH - 35
 
 AVATAR_LEFT = 20
 AVATAR_RIGHT = INFO_X - 18
-# A square viewport, centered vertically against the right-hand content.
-# The ASCII glyphs retain their original aspect ratio and are never cropped.
+# The real avatar has a strictly 1:1 viewport. Any space above/below it
+# is a separate decorative ASCII background, never a stretched avatar.
 CONTENT_TOP = 76
 CONTENT_BOTTOM = 727
 AVATAR_SIZE = AVATAR_RIGHT - AVATAR_LEFT
 AVATAR_TOP = CONTENT_TOP + (CONTENT_BOTTOM - CONTENT_TOP - AVATAR_SIZE) / 2
 AVATAR_BOTTOM = AVATAR_TOP + AVATAR_SIZE
+AVATAR_FILL_OPACITY = 0.55  # Decorative bands stay visibly separate from the portrait.
 
 FONT_FAMILY = "Consolas, 'DejaVu Sans Mono', 'Liberation Mono', monospace"
 BODY_SIZE = 18
@@ -473,150 +474,139 @@ def get_avatar_bounds(avatar_root):
     )
 
 
-def embed_avatar(parent):
-    if not AVATAR_FILE.exists():
-        raise FileNotFoundError(
-            f"Avatar SVG not found: {AVATAR_FILE}"
-        )
+def get_avatar_canvas(avatar_root):
+    """Prefer source SVG canvas; fall back to occupied text bounds.
 
-    avatar_root = ET.parse(
-        AVATAR_FILE
-    ).getroot()
+    The canvas, not the number of ASCII rows, defines the original picture.
+    It must be mapped onto the square viewport with ONE scale factor.
+    """
+    raw = (avatar_root.get("viewBox") or "").replace(",", " ").split()
+    if len(raw) == 4:
+        try:
+            x, y, w, h = map(float, raw)
+            if w > 0 and h > 0:
+                return x, y, w, h
+        except ValueError:
+            pass
 
-    left, top, right, bottom = get_avatar_bounds(
-        avatar_root
-    )
-
-    content_w = max(
-        right - left,
-        1,
-    )
-
-    content_h = max(
-        bottom - top,
-        1,
-    )
-
-    region_w = AVATAR_RIGHT - AVATAR_LEFT
-    region_h = AVATAR_BOTTOM - AVATAR_TOP
-
-    # Uniform scaling: preserve avatar aspect ratio.
-    scale = min(
-        region_w / content_w,
-        region_h / content_h,
-    )
-
-    visible_w = content_w * scale
-    visible_h = content_h * scale
-
-    translate_x = (
-        AVATAR_LEFT
-        + (region_w - visible_w) / 2
-        - left * scale
-    )
-
-    translate_y = (
-        AVATAR_TOP
-        + (region_h - visible_h) / 2
-        - top * scale
-    )
-
-    group = ET.SubElement(
-        parent,
-        svg_element("g"),
-        {
-            "transform": (
-                f"translate("
-                f"{translate_x:.3f},"
-                f"{translate_y:.3f}"
-                f") scale({scale:.6f})"
-            ),
-            "xml:space": "preserve",
-        },
-    )
-
-    # Preserve the original blue ASCII glyphs.
-    for element in avatar_root:
-        if element.tag.rsplit("}", 1)[-1] == "rect":
-            continue
-
-        group.append(
-            deepcopy(element)
-        )
-
-    # Extend the ASCII grid above and below the square avatar without stretching it.
-    fill_avatar_vertical_gaps(parent, avatar_root, top, bottom, scale,
-                              translate_x, translate_y)
+    left, top, right, bottom = get_avatar_bounds(avatar_root)
+    return left, top, max(right - left, 1), max(bottom - top, 1)
 
 
-
-def fill_avatar_vertical_gaps(parent, avatar_root, top, bottom, scale,
-                              translate_x, translate_y):
-    """Fill only the blank bands with newly composed ASCII, never stretch avatar."""
-    import random
-
-    nodes = [n for n in avatar_root.iter()
-             if n.tag.rsplit("}", 1)[-1] == "text"
-             and (n.text or "").strip()
-             and n.get("x") is not None and n.get("y") is not None]
-    if not nodes:
-        return
-
-    # The source row pitch is used unchanged, including glyph size and colors.
-    rows = {}
-    for n in nodes:
-        y = round(svg_number(n.get("y")), 3)
-        rows.setdefault(y, []).append(n)
-    ys = sorted(rows)
-    diffs = [b - a for a, b in zip(ys, ys[1:]) if b - a > 0.5]
-    if not diffs:
-        return
-    diffs.sort()
-    pitch = diffs[len(diffs) // 2]
-    top_y = top * scale + translate_y
-    bottom_y = bottom * scale + translate_y
-    upper_limit = HEADER_HEIGHT + 10
-    lower_limit = HEIGHT - 15
-    rng = random.Random(20261008)
-
+def ensure_defs(parent):
     defs = parent.find(svg_element("defs"))
     if defs is None:
         defs = ET.Element(svg_element("defs"))
         parent.insert(0, defs)
+    return defs
 
-    for side, limit_a, limit_b in (("top", upper_limit, top_y),
-                                   ("bottom", bottom_y, lower_limit)):
-        if limit_b <= limit_a:
+
+def embed_avatar(parent):
+    if not AVATAR_FILE.exists():
+        raise FileNotFoundError(f"Avatar SVG not found: {AVATAR_FILE}")
+
+    avatar_root = ET.parse(AVATAR_FILE).getroot()
+    source_x, source_y, source_w, source_h = get_avatar_canvas(avatar_root)
+
+    # Square canvas + UNIFORM scale.  No separate scaleX / scaleY exists.
+    # `contain` preserves the source without stretching or cropping.
+    scale = min(AVATAR_SIZE / source_w, AVATAR_SIZE / source_h)
+    translate_x = AVATAR_LEFT + (AVATAR_SIZE - source_w * scale) / 2 - source_x * scale
+    translate_y = AVATAR_TOP + (AVATAR_SIZE - source_h * scale) / 2 - source_y * scale
+
+    # First paint independent blue ASCII decorations in the TOP/BOTTOM bands.
+    # These decorations never modify or extend the actual portrait geometry.
+    fill_avatar_vertical_gaps(parent, avatar_root, scale, translate_x, translate_y)
+
+    # Clip the real avatar to its exact 1:1 bounds.  Regardless of the source
+    # canvas aspect ratio, no portrait pixel can bleed into the filler bands.
+    defs = ensure_defs(parent)
+    clip = ET.SubElement(defs, svg_element("clipPath"), {"id": "avatar-1to1-clip"})
+    add_rect(clip, AVATAR_LEFT, AVATAR_TOP, AVATAR_SIZE, AVATAR_SIZE, "white")
+
+    viewport = ET.SubElement(parent, svg_element("g"), {
+        "clip-path": "url(#avatar-1to1-clip)",
+    })
+    avatar_layer = ET.SubElement(viewport, svg_element("g"), {
+        "transform": f"translate({translate_x:.3f},{translate_y:.3f}) scale({scale:.8f})",
+        "xml:space": "preserve",
+    })
+
+    # Keep source text positions, shape, font and original blue colors.
+    for element in avatar_root:
+        if element.tag.rsplit("}", 1)[-1] == "rect":
             continue
+        avatar_layer.append(deepcopy(element))
+
+
+def fill_avatar_vertical_gaps(parent, avatar_root, scale, translate_x, translate_y):
+    """Create separate ASCII bands OUTSIDE the square, without image stretching."""
+    import random
+
+    nodes = [
+        n for n in avatar_root.iter()
+        if n.tag.rsplit("}", 1)[-1] == "text"
+        and (n.text or "").strip()
+        and n.get("x") is not None and n.get("y") is not None
+    ]
+    if not nodes:
+        return
+
+    rows = {}
+    for n in nodes:
+        rows.setdefault(round(svg_number(n.get("y")), 3), []).append(n)
+    ys = sorted(rows)
+    diffs = sorted(b - a for a, b in zip(ys, ys[1:]) if b - a > 0.5)
+    if not diffs:
+        return
+    pitch = diffs[len(diffs) // 2]
+    step = pitch * scale
+    if step <= 0:
+        return
+
+    rng = random.Random(20261008)
+    defs = ensure_defs(parent)
+    transform = f"translate({translate_x:.3f},{translate_y:.3f}) scale({scale:.8f})"
+    bands = (
+        ("top", HEADER_HEIGHT + 10, AVATAR_TOP, ys[:min(4, len(ys))]),
+        ("bottom", AVATAR_BOTTOM, HEIGHT - 15, ys[-min(4, len(ys)):]),
+    )
+
+    for side, band_start, band_end, reference_rows in bands:
+        if band_end <= band_start:
+            continue
+
         clip_id = f"ascii-fill-{side}"
         clip = ET.SubElement(defs, svg_element("clipPath"), {"id": clip_id})
-        add_rect(clip, AVATAR_LEFT, limit_a, AVATAR_RIGHT - AVATAR_LEFT,
-                 limit_b - limit_a, "white")
+        add_rect(clip, AVATAR_LEFT, band_start, AVATAR_SIZE,
+                 band_end - band_start, "white")
         layer = ET.SubElement(parent, svg_element("g"), {
-            "clip-path": f"url(#{clip_id})", "xml:space": "preserve"})
+            "clip-path": f"url(#{clip_id})",
+            "opacity": str(AVATAR_FILL_OPACITY),
+            "xml:space": "preserve",
+        })
+        glyph_layer = ET.SubElement(layer, svg_element("g"), {
+            "transform": transform, "xml:space": "preserve"
+        })
 
-        # Sample nearby original glyphs for their x positions and colors, but
-        # synthesize NEW character content for each added row (no tiled copies).
-        edge_ys = ys[:min(4, len(ys))] if side == "top" else ys[-min(4, len(ys)):]
-        step = pitch * scale
-        if step <= 0:
-            continue
-        count = int((limit_b - limit_a) / step) + 2
-        for index in range(1, count + 1):
-            reference_y = edge_ys[(index - 1) % len(edge_ys)]
-            base_y = (ys[0] if side == "top" else ys[-1])
-            target_y = base_y + (-index if side == "top" else index) * pitch
-            target_screen_y = target_y * scale + translate_y
-            if not (limit_a - step <= target_screen_y <= limit_b + step):
+        # Place rows in screen coordinates and map them back through the SAME
+        # isotropic transform. Original ASCII font size and width are intact.
+        n_rows = int((band_end - band_start) / step) + 3
+        for index in range(n_rows):
+            screen_y = (
+                AVATAR_TOP - (index + 0.5) * step
+                if side == "top"
+                else AVATAR_BOTTOM + (index + 0.5) * step
+            )
+            if screen_y < band_start - step or screen_y > band_end + step:
                 continue
-            for original in rows[reference_y]:
+            source_row = reference_rows[index % len(reference_rows)]
+            source_target_y = (screen_y - translate_y) / scale
+            for original in rows[source_row]:
                 clone = deepcopy(original)
-                source = original.text or ""
-                # Keep whitespace, glyph density, and the original color.
-                # Vary ASCII punctuation without reproducing an avatar edge row.
                 alphabet = "=+-:*#%@"
                 chars = []
-                for ch in source:
+                for ch in original.text or "":
                     if ch.isspace():
                         chars.append(ch)
                     elif ch in "@%#":
@@ -626,14 +616,8 @@ def fill_avatar_vertical_gaps(parent, avatar_root, top, bottom, scale,
                     else:
                         chars.append(rng.choice(alphabet))
                 clone.text = "".join(chars)
-                clone.set("y", f"{target_y:.3f}")
-                # Source glyphs may have different row baselines; x remains intact.
-                layer.append(ET.Element(svg_element("g"), {
-                    "transform": (f"translate({translate_x:.3f},"
-                                  f"{translate_y:.3f}) scale({scale:.6f})"),
-                    "xml:space": "preserve"
-                }))
-                layer[-1].append(clone)
+                clone.set("y", f"{source_target_y:.4f}")
+                glyph_layer.append(clone)
 
 
 # ============================================================
