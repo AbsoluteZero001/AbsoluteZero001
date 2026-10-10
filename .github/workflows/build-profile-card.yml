@@ -103,6 +103,7 @@ jobs:
       - name: Generate Neofetch profile
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BIRTH_DATE: ${{ secrets.BIRTH_DATE }}
         run: |
           python generator/profile_card.py
 
