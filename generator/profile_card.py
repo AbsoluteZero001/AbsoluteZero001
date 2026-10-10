@@ -1,15 +1,3 @@
-"""GitHub Neofetch profile card
-Run from the repository root:
-    python generator/avatar.py
-    python generator/ascii_art.py
-    python generator/profile_card.py
-Input:  cache/avatar.svg
-Output: cache/profile.svg
-The avatar's original colored ASCII glyphs are retained. This module only
-fits the ink bounds to the left column and renders live GitHub information.
-"""
-
-
 from __future__ import annotations
 
 from collections import defaultdict
@@ -46,14 +34,13 @@ RIGHT_EDGE = WIDTH - 35
 
 AVATAR_LEFT = 20
 AVATAR_RIGHT = INFO_X - 18
-# The real avatar has a strictly 1:1 viewport. Any space above/below it
-# is a separate decorative ASCII background, never a stretched avatar.
+# Keep only the original portrait within a strictly square 1:1 viewport.
+# Space above and below is intentionally left blank for future elements.
 CONTENT_TOP = 76
 CONTENT_BOTTOM = 727
 AVATAR_SIZE = AVATAR_RIGHT - AVATAR_LEFT
 AVATAR_TOP = CONTENT_TOP + (CONTENT_BOTTOM - CONTENT_TOP - AVATAR_SIZE) / 2
 AVATAR_BOTTOM = AVATAR_TOP + AVATAR_SIZE
-AVATAR_FILL_OPACITY = 0.55  # Decorative bands stay visibly separate from the portrait.
 
 FONT_FAMILY = "Consolas, 'DejaVu Sans Mono', 'Liberation Mono', monospace"
 BODY_SIZE = 18
@@ -514,9 +501,7 @@ def embed_avatar(parent):
     translate_x = AVATAR_LEFT + (AVATAR_SIZE - source_w * scale) / 2 - source_x * scale
     translate_y = AVATAR_TOP + (AVATAR_SIZE - source_h * scale) / 2 - source_y * scale
 
-    # First paint independent blue ASCII decorations in the TOP/BOTTOM bands.
-    # These decorations never modify or extend the actual portrait geometry.
-    fill_avatar_vertical_gaps(parent, avatar_root, scale, translate_x, translate_y)
+    # No decorative characters outside the square: reserve both bands for new content.
 
     # Clip the real avatar to its exact 1:1 bounds.  Regardless of the source
     # canvas aspect ratio, no portrait pixel can bleed into the filler bands.
@@ -538,86 +523,6 @@ def embed_avatar(parent):
             continue
         avatar_layer.append(deepcopy(element))
 
-
-def fill_avatar_vertical_gaps(parent, avatar_root, scale, translate_x, translate_y):
-    """Create separate ASCII bands OUTSIDE the square, without image stretching."""
-    import random
-
-    nodes = [
-        n for n in avatar_root.iter()
-        if n.tag.rsplit("}", 1)[-1] == "text"
-        and (n.text or "").strip()
-        and n.get("x") is not None and n.get("y") is not None
-    ]
-    if not nodes:
-        return
-
-    rows = {}
-    for n in nodes:
-        rows.setdefault(round(svg_number(n.get("y")), 3), []).append(n)
-    ys = sorted(rows)
-    diffs = sorted(b - a for a, b in zip(ys, ys[1:]) if b - a > 0.5)
-    if not diffs:
-        return
-    pitch = diffs[len(diffs) // 2]
-    step = pitch * scale
-    if step <= 0:
-        return
-
-    rng = random.Random(20261008)
-    defs = ensure_defs(parent)
-    transform = f"translate({translate_x:.3f},{translate_y:.3f}) scale({scale:.8f})"
-    bands = (
-        ("top", HEADER_HEIGHT + 10, AVATAR_TOP, ys[:min(4, len(ys))]),
-        ("bottom", AVATAR_BOTTOM, HEIGHT - 15, ys[-min(4, len(ys)):]),
-    )
-
-    for side, band_start, band_end, reference_rows in bands:
-        if band_end <= band_start:
-            continue
-
-        clip_id = f"ascii-fill-{side}"
-        clip = ET.SubElement(defs, svg_element("clipPath"), {"id": clip_id})
-        add_rect(clip, AVATAR_LEFT, band_start, AVATAR_SIZE,
-                 band_end - band_start, "white")
-        layer = ET.SubElement(parent, svg_element("g"), {
-            "clip-path": f"url(#{clip_id})",
-            "opacity": str(AVATAR_FILL_OPACITY),
-            "xml:space": "preserve",
-        })
-        glyph_layer = ET.SubElement(layer, svg_element("g"), {
-            "transform": transform, "xml:space": "preserve"
-        })
-
-        # Place rows in screen coordinates and map them back through the SAME
-        # isotropic transform. Original ASCII font size and width are intact.
-        n_rows = int((band_end - band_start) / step) + 3
-        for index in range(n_rows):
-            screen_y = (
-                AVATAR_TOP - (index + 0.5) * step
-                if side == "top"
-                else AVATAR_BOTTOM + (index + 0.5) * step
-            )
-            if screen_y < band_start - step or screen_y > band_end + step:
-                continue
-            source_row = reference_rows[index % len(reference_rows)]
-            source_target_y = (screen_y - translate_y) / scale
-            for original in rows[source_row]:
-                clone = deepcopy(original)
-                alphabet = "=+-:*#%@"
-                chars = []
-                for ch in original.text or "":
-                    if ch.isspace():
-                        chars.append(ch)
-                    elif ch in "@%#":
-                        chars.append(rng.choice("@%#*"))
-                    elif ch in "=+-_":
-                        chars.append(rng.choice("=+-"))
-                    else:
-                        chars.append(rng.choice(alphabet))
-                clone.text = "".join(chars)
-                clone.set("y", f"{source_target_y:.4f}")
-                glyph_layer.append(clone)
 
 
 # ============================================================
