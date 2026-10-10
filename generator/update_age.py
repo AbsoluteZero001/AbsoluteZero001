@@ -1,31 +1,135 @@
 """
-Update only the age text in the published Neofetch SVG.
+Update the published Neofetch SVG at Beijing midnight.
+
+Only modify the age and LAST UPDATED fields when age changes.
 
 Does not download avatars, query GitHub, or regenerate the card.
-Only the exact XML text between <text id="profile-age">...</text> changes.
+
+BIRTH_DATE is read from GitHub Actions Secrets.
+The actual birth date is never stored in the generated SVG.
 """
 
 from __future__ import annotations
 
+from datetime import datetime
 from pathlib import Path
 import re
 import xml.etree.ElementTree as ET
 
-from age_utils import calculate_age
+from age_utils import BEIJING_TZ, calculate_age
 
+
+# ============================================================
+# Configuration
+# ============================================================
 
 PROFILE_SVG = Path("profile.svg")
+
 AGE_ID = "profile-age"
+UPDATED_ID = "profile-last-updated"
+
+
+# ============================================================
+# SVG patterns
+# ============================================================
 
 AGE_PATTERN = re.compile(
-    r'(<text\b(?=[^>]*\bid="profile-age")[^>]*>)(\d+ years)(</text>)'
+    r'(<text\b(?=[^>]*\bid="profile-age")[^>]*>)'
+    r'(\d+ years)'
+    r'(</text>)'
+)
+
+UPDATED_PATTERN = re.compile(
+    r'(<text\b(?=[^>]*\bid="profile-last-updated")[^>]*>)'
+    r'(\d{4}-\d{2}-\d{2}  \d{2}:\d{2}:\d{2})'
+    r'(</text>)'
 )
 
 
-def update_age_only(path: Path = PROFILE_SVG) -> bool:
+# ============================================================
+# Beijing timestamp
+# ============================================================
 
-    # 从 age_utils.py 获取北京时间对应的周岁
-    new_value = f"{calculate_age()} years"
+def beijing_timestamp() -> str:
+    """
+    Return the actual Beijing time when SVG is modified.
+
+    This is not the scheduled GitHub Actions cron time.
+    """
+
+    return datetime.now(BEIJING_TZ).strftime(
+        "%Y-%m-%d  %H:%M:%S"
+    )
+
+
+# ============================================================
+# SVG validation
+# ============================================================
+
+def _require_plain_text(
+    root: ET.Element,
+    marker: str,
+    pattern: re.Pattern[str],
+    source: str,
+):
+    """
+    Ensure the target SVG element exists exactly once.
+
+    Refuse to modify the file when the structure is unexpected.
+    """
+
+    elements = [
+        node
+        for node in root.iter()
+        if node.get("id") == marker
+    ]
+
+    if len(elements) != 1:
+        raise RuntimeError(
+            f"Expected exactly one SVG element with id={marker}"
+        )
+
+    element = elements[0]
+
+    if (
+        element.tag.rsplit("}", 1)[-1] != "text"
+        or len(element)
+    ):
+        raise RuntimeError(
+            f"{marker} must be a plain SVG text element"
+        )
+
+    matches = list(pattern.finditer(source))
+
+    if (
+        len(matches) != 1
+        or matches[0].group(2) != element.text
+    ):
+        raise RuntimeError(
+            f"Unexpected SVG markup for {marker}; "
+            "refusing partial update"
+        )
+
+    return matches[0]
+
+
+# ============================================================
+# Independent age update
+# ============================================================
+
+def update_age_only(
+    path: Path = PROFILE_SVG
+) -> bool:
+    """
+    Update age and LAST UPDATED only when age changes.
+
+    Returns:
+        True  - SVG content changed.
+        False - Age unchanged; no file modifications.
+    """
+
+    # Calculate current age using Beijing date.
+    new_age = f"{calculate_age()} years"
 
     if not path.is_file():
         raise FileNotFoundError(
@@ -33,65 +137,100 @@ def update_age_only(path: Path = PROFILE_SVG) -> bool:
             "Run the full Neofetch workflow first."
         )
 
-    original = path.read_bytes()
-    source = original.decode("utf-8")
+    # Read original SVG without changing its formatting.
+    source = path.read_bytes().decode("utf-8")
 
-    # 验证 SVG，并且确保年龄元素唯一
-    svg_root = ET.fromstring(source)
+    # Validate SVG structure.
+    root = ET.fromstring(source)
 
-    targets = [
-        element
-        for element in svg_root.iter()
-        if element.get("id") == AGE_ID
-    ]
-
-    if len(targets) != 1:
-        raise RuntimeError(
-            "Could not find exactly one profile-age SVG element. "
-            "Run the updated Neofetch workflow first."
-        )
-
-    target = targets[0]
-
-    if target.tag.rsplit("}", 1)[-1] != "text" or len(target):
-        raise RuntimeError(
-            "profile-age must be a plain SVG text element"
-        )
-
-    matches = list(AGE_PATTERN.finditer(source))
-
-    if len(matches) != 1 or matches[0].group(2) != target.text:
-        raise RuntimeError(
-            "Unexpected SVG age markup; refusing to alter other content"
-        )
-
-    match = matches[0]
-    previous_value = match.group(2)
-
-    # 年龄没有变化，不修改文件
-    if previous_value == new_value:
-        print(
-            "Age unchanged; no SVG modifications "
-            "and no commit needed."
-        )
-        return False
-
-    # 仅替换年龄文本，不重新生成 SVG
-    updated = (
-        source[:match.start(2)]
-        + new_value
-        + source[match.end(2):]
+    # Locate age element.
+    age_match = _require_plain_text(
+        root,
+        AGE_ID,
+        AGE_PATTERN,
+        source,
     )
 
-    # 再次验证 SVG 格式
+    # Locate LAST UPDATED element.
+    timestamp_match = _require_plain_text(
+        root,
+        UPDATED_ID,
+        UPDATED_PATTERN,
+        source,
+    )
+
+    old_age = age_match.group(2)
+
+    # ========================================================
+    # No age change -> no SVG update
+    # ========================================================
+
+    if old_age == new_age:
+
+        print(
+            "Age unchanged; "
+            "LAST UPDATED unchanged; "
+            "no commit needed."
+        )
+
+        return False
+
+    # ========================================================
+    # Age changed -> update both fields
+    # ========================================================
+
+    new_time = beijing_timestamp()
+
+    updated = source
+
+    changes = [
+        (
+            age_match.start(2),
+            age_match.end(2),
+            new_age,
+        ),
+        (
+            timestamp_match.start(2),
+            timestamp_match.end(2),
+            new_time,
+        ),
+    ]
+
+    # Replace from right to left to preserve text positions.
+    for start, end, replacement in sorted(
+        changes,
+        reverse=True,
+    ):
+
+        updated = (
+            updated[:start]
+            + replacement
+            + updated[end:]
+        )
+
+    # Validate SVG before writing.
     ET.fromstring(updated)
 
-    path.write_bytes(updated.encode("utf-8"))
+    # Write only after all checks have passed.
+    path.write_bytes(
+        updated.encode("utf-8")
+    )
 
-    print(f"Age updated: {previous_value} -> {new_value}")
+    print(
+        f"Age updated: {old_age} -> {new_age}"
+    )
+
+    print(
+        f"LAST UPDATED set to: "
+        f"{new_time} (Asia/Shanghai)"
+    )
 
     return True
 
+
+# ============================================================
+# Entry point
+# ============================================================
 
 if __name__ == "__main__":
     update_age_only()
