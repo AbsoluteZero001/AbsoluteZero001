@@ -1,0 +1,96 @@
+name: Update Neofetch Age at Beijing Midnight
+
+on:
+  # UTC 16:00 = 北京时间次日 00:00
+  schedule:
+    - cron: '0 16 * * *'
+
+  # 允许手动触发
+  workflow_dispatch:
+
+# 允许修改仓库文件
+permissions:
+  contents: write
+
+# 与原有 Neofetch Workflow 使用相同的并发组
+# 避免两个工作流同时修改 SVG
+concurrency:
+  group: neofetch-profile-card
+  cancel-in-progress: false
+
+jobs:
+  update-age:
+    name: Update only the Age field
+    runs-on: ubuntu-24.04
+
+    steps:
+      # 1. 拉取仓库代码
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      # 2. 配置 Python
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      # 3. 配置 Git 提交身份
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      # 4. 检查年龄变化并更新 SVG
+      - name: Update and push the published SVG if age changed
+        shell: bash
+
+        # 从 GitHub Secrets 读取生日
+        env:
+          BIRTH_DATE: ${{ secrets.BIRTH_DATE }}
+
+        run: |
+          set -euo pipefail
+
+          # 最多重试 5 次，处理远程提交冲突
+          for attempt in 1 2 3 4 5; do
+
+            echo "Age-only push attempt: $attempt"
+
+            # 获取远程最新 main
+            git fetch origin main
+
+            # 同步最新代码
+            git reset --hard origin/main
+
+            # 执行独立年龄更新脚本
+            # 只更新根目录 profile.svg 的 Age 字段
+            python generator/update_age.py
+
+            # 添加修改后的 SVG
+            git add -- profile.svg
+
+            # 年龄没有变化则直接结束
+            if git diff --cached --quiet; then
+              echo "Age has not changed; no commit necessary."
+              exit 0
+            fi
+
+            # 提交年龄变化
+            git commit -m "chore: update Neofetch age"
+
+            # 推送到 main
+            if git push origin HEAD:main; then
+              echo "Age field updated successfully."
+              exit 0
+            fi
+
+            echo "Remote updated during push. Retrying..."
+            sleep 5
+
+          done
+
+          echo "Failed to push age update after 5 attempts."
+          exit 1
