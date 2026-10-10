@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from copy import deepcopy
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 import os
 import xml.etree.ElementTree as ET
@@ -34,13 +34,12 @@ RIGHT_EDGE = WIDTH - 35
 
 AVATAR_LEFT = 20
 AVATAR_RIGHT = INFO_X - 18
-# Keep only the original portrait within a strictly square 1:1 viewport.
-# Space above and below is intentionally left blank for future elements.
-CONTENT_TOP = 76
-CONTENT_BOTTOM = 727
-AVATAR_SIZE = AVATAR_RIGHT - AVATAR_LEFT
-AVATAR_TOP = CONTENT_TOP + (CONTENT_BOTTOM - CONTENT_TOP - AVATAR_SIZE) / 2
-AVATAR_BOTTOM = AVATAR_TOP + AVATAR_SIZE
+# Preserve the original ASCII portrait in a strictly square 1:1 viewport.
+# Move it upward to reserve a small terminal for identity information below.
+AVATAR_SIZE = AVATAR_RIGHT - AVATAR_LEFT  # 577 x 577
+AVATAR_TOP = HEADER_HEIGHT + 10          # y = 52
+AVATAR_BOTTOM = AVATAR_TOP + AVATAR_SIZE # y = 629
+TERMINAL_X = AVATAR_LEFT + 18
 
 FONT_FAMILY = "Consolas, 'DejaVu Sans Mono', 'Liberation Mono', monospace"
 BODY_SIZE = 18
@@ -58,6 +57,31 @@ YELLOW = "#F1C40F"
 # Fixed Beijing timezone, independent of the machine / CI runner timezone.
 CLOCK_TZ = timezone(timedelta(hours=8))
 CLOCK_TZ_LABEL = "CN · UTC+08:00"
+
+
+def calculate_age(today: date | None = None) -> int:
+    """Whole years using the Beijing date; never embed or print the secret."""
+    birth_date_value = os.environ.get("BIRTH_DATE", "")
+    if not birth_date_value:
+        raise RuntimeError(
+            "BIRTH_DATE is missing. Pass the Actions secret into the profile generation step."
+        )
+
+    try:
+        birthday = date.fromisoformat(birth_date_value)
+        # Require an unambiguous canonical ISO date.
+        if birthday.isoformat() != birth_date_value:
+            raise ValueError("Noncanonical date")
+    except ValueError:
+        raise ValueError("BIRTH_DATE must be a valid YYYY-MM-DD date") from None
+
+    today = today if today is not None else datetime.now(CLOCK_TZ).date()
+    if birthday > today:
+        raise ValueError("BIRTH_DATE cannot be in the future")
+
+    return today.year - birthday.year - (
+        (today.month, today.day) < (birthday.month, birthday.day)
+    )
 
 LANGUAGE_COLORS = {
     "Java": "#F89820",
@@ -526,6 +550,29 @@ def embed_avatar(parent):
 
 
 # ============================================================
+# Linux identity terminal: no personal birthday is stored in the SVG.
+# ============================================================
+
+def draw_identity_terminal(parent, age: int) -> None:
+    # A quiet separator makes the newly available region read as a terminal.
+    add_line(parent, TERMINAL_X, 644, AVATAR_RIGHT - 4, 644)
+
+    def command(y: int, name: str) -> None:
+        prompt = add_text(parent, TERMINAL_X, y, "", size=16)
+        user_span = ET.SubElement(prompt, svg_element("tspan"), {"fill": GREEN})
+        user_span.text = "absolutezero@vertex"
+        path_span = ET.SubElement(prompt, svg_element("tspan"), {"fill": BLUE})
+        path_span.text = ":~$ "
+        command_span = ET.SubElement(prompt, svg_element("tspan"), {"fill": TEXT})
+        command_span.text = name
+
+    command(665, "whoami")
+    add_text(parent, TERMINAL_X, 686, "absolutezero", color=TEXT, size=16)
+    command(710, "age")  # Custom informational command, not standard Linux.
+    add_text(parent, TERMINAL_X, 731, f"{age} years", color=TEXT, size=16)
+
+
+# ============================================================
 # Terminal-style language meters and proportional distribution bar
 # ============================================================
 
@@ -672,6 +719,9 @@ def draw_languages(parent, languages):
 # ============================================================
 
 def generate_profile():
+    # Resolve the age before any network requests: fail early if the secret is missing.
+    age = calculate_age()
+
     print("Fetching GitHub user data...")
     user = get_user_data()
 
@@ -776,6 +826,7 @@ def generate_profile():
     # ========================================================
 
     embed_avatar(root)
+    draw_identity_terminal(root, age)
 
     # ========================================================
     # GitHub username
