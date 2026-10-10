@@ -1,0 +1,92 @@
+name: Temporary LAST UPDATED Regression Test
+
+# Disposable test. Never schedule or commit generated files.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository (read-only)
+        uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Test age rollover and LAST UPDATED on temporary SVG
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PYCODE'
+          from datetime import date, datetime, timezone
+          from pathlib import Path
+          from tempfile import TemporaryDirectory
+          from unittest.mock import patch
+          import os
+          import sys
+          import xml.etree.ElementTree as ET
+
+          sys.path.insert(0, str(Path('generator').resolve()))
+          import age_utils
+          import update_age
+
+          # This is a made-up date. Real BIRTH_DATE Secret is never passed.
+          with patch.dict(os.environ, {'BIRTH_DATE': '2000-06-15'}):
+              assert age_utils.calculate_age(date(2027, 6, 14)) == 26
+              assert age_utils.calculate_age(date(2027, 6, 15)) == 27
+              before_midnight = datetime(2027, 6, 14, 15, 59, 59, tzinfo=timezone.utc)
+              at_midnight = datetime(2027, 6, 14, 16, 0, 0, tzinfo=timezone.utc)
+              assert before_midnight.astimezone(age_utils.BEIJING_TZ).date() == date(2027, 6, 14)
+              assert at_midnight.astimezone(age_utils.BEIJING_TZ).date() == date(2027, 6, 15)
+              print('PASS: Beijing midnight rollover')
+
+              published = Path('profile.svg')
+              assert published.is_file(), 'Full profile must be built before testing'
+              original_bytes = published.read_bytes()
+              content = original_bytes.decode('utf-8')
+              m_age = list(update_age.AGE_PATTERN.finditer(content))
+              m_time = list(update_age.UPDATED_PATTERN.finditer(content))
+              assert len(m_age) == len(m_time) == 1
+              root = ET.fromstring(content)
+              assert len([n for n in root.iter() if n.get('id') == 'profile-age']) == 1
+              assert len([n for n in root.iter() if n.get('id') == 'profile-last-updated']) == 1
+              print('PASS: Unique age and last-updated markers')
+
+              with TemporaryDirectory(prefix='last-updated-test-') as directory:
+                  trial = Path(directory) / 'profile-trial.svg'
+                  fixture = content
+                  for start, end, value in sorted([
+                      (m_age[0].start(2), m_age[0].end(2), '26 years'),
+                      (m_time[0].start(2), m_time[0].end(2), '2027-06-14  08:05:00')
+                  ], reverse=True):
+                      fixture = fixture[:start] + value + fixture[end:]
+                  trial.write_text(fixture, encoding='utf-8')
+                  with patch.object(update_age, 'calculate_age', return_value=27), \
+                       patch.object(update_age, 'beijing_timestamp', return_value='2027-06-15  00:03:26'):
+                      assert update_age.update_age_only(trial) is True
+                      actual = trial.read_text(encoding='utf-8')
+                      am = list(update_age.AGE_PATTERN.finditer(fixture))[0]
+                      tm = list(update_age.UPDATED_PATTERN.finditer(fixture))[0]
+                      expected = fixture
+                      for start, end, value in sorted([
+                          (am.start(2), am.end(2), '27 years'),
+                          (tm.start(2), tm.end(2), '2027-06-15  00:03:26')
+                      ], reverse=True):
+                          expected = expected[:start] + value + expected[end:]
+                      assert actual == expected
+                      ET.fromstring(actual)
+                      print('PASS: Only age and LAST UPDATED changed')
+                      assert update_age.update_age_only(trial) is False
+                      assert trial.read_text(encoding='utf-8') == actual
+                      print('PASS: No changes or timestamp refresh when age unchanged')
+
+              assert published.read_bytes() == original_bytes
+              print('PASS: Published profile.svg untouched')
+              print('PASS: Temporary files auto-deleted')
+              print('ALL TESTS PASSED')
+          PYCODE
