@@ -45,20 +45,20 @@ Total Time: 358 hrs 44 mins
 <!--START_SECTION:WakaLast30Days-->
 
 ```txt
-From: 08 October 2026 - To: 07 November 2026
+From: 09 October 2026 - To: 08 November 2026
 
-Total Time: 76 hrs 55 mins
+Total Time: 70 hrs 24 mins
 
-Java              38 hrs 36 mins        ███████████▓░░░░░░░░░░░░░   47.28 %
-SQL               12 hrs 5 mins         ███▓░░░░░░░░░░░░░░░░░░░░░   14.81 %
-Go                8 hrs 45 mins         ██▓░░░░░░░░░░░░░░░░░░░░░░   10.72 %
-Other             4 hrs 43 mins         █▒░░░░░░░░░░░░░░░░░░░░░░░   05.79 %
-Markdown          3 hrs 59 mins         █▒░░░░░░░░░░░░░░░░░░░░░░░   04.89 %
-Python            3 hrs 6 mins          █░░░░░░░░░░░░░░░░░░░░░░░░   03.80 %
-Java Properties   1 hr 38 mins          ▓░░░░░░░░░░░░░░░░░░░░░░░░   02.00 %
-Text              1 hr 16 mins          ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.56 %
-Vue               1 hr 1 min            ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.25 %
-CSS               55 mins               ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.14 %
+Java              35 hrs 20 mins        ███████████▓░░░░░░░░░░░░░   47.05 %
+SQL               11 hrs 24 mins        ███▓░░░░░░░░░░░░░░░░░░░░░   15.19 %
+Go                7 hrs 38 mins         ██▓░░░░░░░░░░░░░░░░░░░░░░   10.17 %
+Other             4 hrs 42 mins         █▓░░░░░░░░░░░░░░░░░░░░░░░   06.26 %
+Markdown          3 hrs 40 mins         █▒░░░░░░░░░░░░░░░░░░░░░░░   04.90 %
+Python            3 hrs 3 mins          █░░░░░░░░░░░░░░░░░░░░░░░░   04.08 %
+Java Properties   1 hr 38 mins          ▓░░░░░░░░░░░░░░░░░░░░░░░░   02.18 %
+Vue               1 hr 1 min            ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.36 %
+CSS               55 mins               ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.24 %
+XML               53 mins               ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.19 %
 ```
 
 <!--END_SECTION:WakaLast30Days-->
