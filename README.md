@@ -45,20 +45,20 @@ Total Time: 387 hrs 17 mins
 <!--START_SECTION:WakaLast30Days-->
 
 ```txt
-From: 25 October 2026 - To: 24 November 2026
+From: 26 October 2026 - To: 25 November 2026
 
-Total Time: 63 hrs 42 mins
+Total Time: 60 hrs 18 mins
 
-Java              38 hrs 18 mins        ██████████████▒░░░░░░░░░░   57.77 %
-SQL               14 hrs 11 mins        █████▒░░░░░░░░░░░░░░░░░░░   21.41 %
-Markdown          2 hrs 44 mins         █░░░░░░░░░░░░░░░░░░░░░░░░   04.13 %
-Other             2 hrs 35 mins         █░░░░░░░░░░░░░░░░░░░░░░░░   03.92 %
-GitIgnore file    2 hrs 15 mins         █░░░░░░░░░░░░░░░░░░░░░░░░   03.41 %
-Python            1 hr 7 mins           ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.71 %
-XML               53 mins               ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.34 %
-CSS               40 mins               ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.01 %
-Java Properties   38 mins               ▒░░░░░░░░░░░░░░░░░░░░░░░░   00.98 %
-Go                32 mins               ▒░░░░░░░░░░░░░░░░░░░░░░░░   00.81 %
+Java              37 hrs 28 mins        ██████████████▓░░░░░░░░░░   58.93 %
+SQL               11 hrs 2 mins         ████▒░░░░░░░░░░░░░░░░░░░░   17.36 %
+Other             3 hrs 17 mins         █▒░░░░░░░░░░░░░░░░░░░░░░░   05.17 %
+Markdown          2 hrs 46 mins         █░░░░░░░░░░░░░░░░░░░░░░░░   04.37 %
+GitIgnore file    2 hrs 28 mins         █░░░░░░░░░░░░░░░░░░░░░░░░   03.89 %
+Python            1 hr 7 mins           ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.78 %
+XML               51 mins               ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.36 %
+CSS               40 mins               ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.05 %
+Java Properties   38 mins               ▒░░░░░░░░░░░░░░░░░░░░░░░░   01.01 %
+Go                32 mins               ▒░░░░░░░░░░░░░░░░░░░░░░░░   00.85 %
 ```
 
 <!--END_SECTION:WakaLast30Days-->
